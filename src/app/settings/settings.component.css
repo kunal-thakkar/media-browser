@@ -1,0 +1,47 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.row-100 {
+    width: 100%;
+    margin: 5px 0px;
+}
+
+.col-25 {
+    width: 25%;
+    display: inline-block;
+}
+
+.col-50 {
+    width: 50%;
+    display: inline-block;
+}
+
+.col-100 {
+    width: 100%;
+    display: inline-block;
+}
+
+input {
+    width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .col-25,
+    .col-50 {
+        width: 100%;
+    }
+}

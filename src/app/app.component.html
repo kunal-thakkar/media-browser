@@ -1,14 +1,6 @@
-<input class="mySearch" type="text" id="mySearch" placeholder="Search ..">
-<div *ngFor="let category of categories; index as i; trackBy: trackByFn">
-    <div class="cat-label">{{category.label}}</div>
-    <div class="scrollable">
-        <div class="movie-info" *ngFor="let item of category.items">
-            <div *ngIf="item.poster_path">
-                <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" />
-                <div class="movie-title">{{item.title}}</div>
-            </div>
-        </div>
-    </div>
-</div>
+<ul>
+    <li><a href="/">Home</a></li>
+    <li class="settings"><a href="/settings">Settings</a></li>
+</ul>
 <router-outlet>
 </router-outlet>

@@ -1,0 +1,47 @@
+<div class="row-100">
+    <div class="col-25">TMDB API key</div>
+    <div class="col-50"><input type="text" [(ngModel)]="tmdbKey" /></div>
+    <div class="col-25"></div>
+</div>
+<div>
+    <form [formGroup]="fg">
+        <div class="row-100" *ngFor="let field of formFields">
+            <div class="col-25">{{field.label}}</div>
+            <div class="col-50">
+                <input type="date" *ngIf="field.type == 'date'" formControlName="{{field.key}}" />
+                <input type="text" *ngIf="field.type == 'text'" formControlName="{{field.key}}" />
+                <select *ngIf="field.type == 'choice' && isArray(field.set)" formControlName="{{field.key}}" (change)="updateForm()">
+                    <option></option>
+                    <option *ngFor="let k of field.set">{{k}}</option>
+                </select>
+                <select *ngIf="field.type == 'choice' && !isArray(field.set)" formControlName="{{field.key}}">
+                    <option></option>
+                    <option *ngFor="let k of Object.keys(field.set)" value="{{k}}">{{field.set[k]}}</option>
+                </select>
+                <select *ngIf="field.type == 'multi-choice'" multiple formControlName="{{field.key}}">
+                    <option></option>
+                    <option *ngFor="let k of Object.keys(field.set)" value="{{k}}">{{field.set[k]}}</option>
+                </select>
+            </div>
+            <div class="col-25">{{field.desc}}</div>
+        </div>
+        <input type="button" value="Add/Update" (click)="addFilter()" />
+    </form>
+</div>
+<div style="overflow-x:auto;">
+    <table>
+        <tr>
+            <th>Filter</th>
+            <th>Action</th>
+        </tr>
+        <tr *ngFor="let filter of discoverMovieFilters; index as i;">
+            <td>{{filter._title}}</td>
+            <td><input type="button" (click)="removeFilter(i)" value="Delete" /></td>
+        </tr>
+    </table>
+</div>
+<div class="row-100">
+    <div class="col-100">
+        <input type="button" (click)="saveSettings()" value="Save Preferences" />
+    </div>
+</div>

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Option } from './discover.option';
+import { HttpClient } from '@angular/common/http';
+import { DiscoverOption } from './discover.option';
+
+export enum Category {
+  Movie = "movie", TvShows = "tv"
+}
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +13,19 @@ import { Option } from './discover.option';
 export class TmdbService {
 
   tmdbBaseUrl = "https://api.themoviedb.org/3";
-  api_key = "";
+  apiKey = "";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   configuration(): Observable<any>{
-    return this.http.get(`${this.tmdbBaseUrl}/configuration?api_key=${this.api_key}`);
+    return this.http.get(`${this.tmdbBaseUrl}/configuration?api_key=${this.apiKey}`);
   }
 
   private addQueryCriteria(query: String[], key: String, val: String){
-    if(val.startsWith('<')) 
+    if(Array.isArray(val)){
+      query.push(`${key}=`+val.join("|"));
+    }
+    else if(val.startsWith('<')) 
       query.push(`${key}.lte=`+val.substr(1));
     else if(val.startsWith('>')) 
       query.push(`${key}.gte=`+val.substr(1));
@@ -31,16 +37,24 @@ export class TmdbService {
     else query.push(`${key}=${val}`);
   }
 
-  discoverMovie(o: Option): Observable<any>{
-    let query = ["api_key="+this.api_key];
-    if (o.lang) query.push("with_original_language="+o.lang);
-    if (o.sort_by) query.push('sort_by='+o.sort_by);
-    if (o.certification_country) query.push('certification_country='+o.certification_country);
-    if (o.certification) this.addQueryCriteria(query, 'certification', o.certification);
-    if (o.primary_release_date) this.addQueryCriteria(query, 'primary_release_date', o.primary_release_date);
-    if (o.primary_release_year) query.push('primary_release_year='+ o.primary_release_year);
-    return this.http.get(`${this.tmdbBaseUrl}/discover/movie?`+query.join("&"));
+  setApiKey(key: string){
+    this.apiKey = key;
   }
 
+  discover(c: Category, o: DiscoverOption): Observable<any>{
+    let query = ["api_key="+this.apiKey];
+    for(let k in o){
+      if(o.hasOwnProperty(k) && o[k]) this.addQueryCriteria(query, k, o[k]);
+    }
+    return this.http.get(`${this.tmdbBaseUrl}/discover/${c}?`+query.join("&"));
+  }
+
+  getGenreList(c: Category){
+    return this.http.get(`${this.tmdbBaseUrl}/genre/${c}/list?api_key=${this.apiKey}`);
+  }
+
+  getCertifications(c: Category){
+    return this.http.get(`${this.tmdbBaseUrl}/certification/${c}/list?api_key=${this.apiKey}`);
+  }
 
 }

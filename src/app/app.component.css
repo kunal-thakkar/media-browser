@@ -1,48 +1,19 @@
-#mySearch {
-    background-image: url('/assets/images/searchicon.png');
-    /* Add a search icon to input */
-    background-position: 10px 12px;
-    /* Position the search icon */
-    background-repeat: no-repeat;
-    /* Do not repeat the icon image */
-    width: calc(100% - 60px);
-    /* Full-width */
-    font-size: 16px;
-    /* Increase font-size */
-    padding: 12px 20px 12px 40px;
-    /* Add some padding */
-    border: 1px solid #ddd;
-    /* Add a grey border */
-    margin-bottom: 12px;
-    /* Add some space below the input */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
-div.scrollable {
-    width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
-    margin: 5px 0px;
+li {
+    float: left;
 }
 
-.cat-label {
-    font-size: x-large;
-    margin: 15px 0px 0px 5px;
-    font-weight: bolder;
+.settings {
+    float: right;
 }
 
-.movie-info {
-    padding: 5px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.movie-poster {
-    width: 150px;
-    height: 220px;
-}
-
-.movie-title {
-    white-space: normal;
-    width: 150px;
+li a {
+    display: block;
+    padding: 8px;
 }

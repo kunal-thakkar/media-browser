@@ -1,8 +1,9 @@
-export class Option {
-    lang?: String;
+export class DiscoverOption {
+    with_original_language?: String;
     sort_by?: String;
     certification?: String;
+    certification_country?: String;
     primary_release_date?: String;
     primary_release_year?: String;
-    certification_country?: String;
+    genres?: String;
 }
