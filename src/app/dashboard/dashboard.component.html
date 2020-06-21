@@ -8,5 +8,6 @@
                 <div class="movie-title">{{item.title}}</div>
             </div>
         </div>
+        <button *ngIf="!category.isLoading" (click)="loadMore(i)" class="load-more">></button>
     </div>
 </div>

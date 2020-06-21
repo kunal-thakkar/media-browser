@@ -1,4 +1,5 @@
 export class DiscoverOption {
+    page?: number;
     with_original_language?: String;
     sort_by?: String;
     certification?: String;

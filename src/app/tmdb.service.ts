@@ -25,6 +25,9 @@ export class TmdbService {
     if(Array.isArray(val)){
       query.push(`${key}=`+val.join("|"));
     }
+    else if(typeof(val) == "number"){
+      query.push(`${key}=${val}`);
+    }
     else if(val.startsWith('<')) 
       query.push(`${key}.lte=`+val.substr(1));
     else if(val.startsWith('>')) 
