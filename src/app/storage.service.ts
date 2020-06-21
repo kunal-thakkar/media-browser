@@ -78,4 +78,12 @@ export class StorageService {
     this.write(StorageKeys.PreferenceKey, JSON.stringify(p));
   }
 
+  addWatchedId(cat: Category, id: number){
+    this.writeJson(`watched_${cat}`, (this.readJSON(`watched_${cat}`)||[]).concat(id));
+  }
+
+  getWatchedIds(cat: Category){
+    return this.readJSON(`watched_${cat}`) || [];
+  }
+
 }

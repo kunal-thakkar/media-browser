@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
 
   imgBaseUrl = "";
   categories: Filters[] = [];
+  watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
 
   constructor(private tmdbService: TmdbService, private storage: StorageService){}
 
@@ -47,6 +48,15 @@ export class DashboardComponent implements OnInit {
       e.index = page;
       setTimeout(()=>{ e.isLoading = false }, 2000);
     });
+  }
+
+  isWatched(id: number): boolean {
+    return this.watchedIds.includes(id);
+  }
+
+  watched(catIdx: number, itemId: number){
+    this.watchedIds.push(itemId);
+    this.storage.addWatchedId(Category.Movie, itemId);
   }
 
   formatDate(d: Date):String{

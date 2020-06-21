@@ -23,6 +23,7 @@ div.scrollable {
     overflow-y: hidden;
     white-space: nowrap;
     margin: 5px 0px;
+    display: inline-flex;
 }
 
 .cat-label {
@@ -33,13 +34,13 @@ div.scrollable {
 
 .movie-info {
     padding: 5px;
-    display: inline-block;
     vertical-align: top;
 }
 
 .movie-poster {
     width: 150px;
     height: 220px;
+    float: left;
 }
 
 .movie-title {
@@ -55,4 +56,9 @@ div.scrollable {
     background: gray;
     color: white;
     border: 1px solid gray;
+}
+
+.hide-button {
+    opacity: 75%;
+    margin-left: -25px;
 }

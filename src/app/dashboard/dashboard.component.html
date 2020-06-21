@@ -2,10 +2,13 @@
 <div *ngFor="let category of categories; index as i;">
     <div class="cat-label">{{category.title}}</div>
     <div class="scrollable">
-        <div class="movie-info" *ngFor="let item of category.items">
-            <div *ngIf="item.poster_path">
-                <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" />
-                <div class="movie-title">{{item.title}}</div>
+        <div *ngFor="let item of category.items;">
+            <div *ngIf="!isWatched(item.id) && item.poster_path">
+                <div class="movie-info">
+                    <button class="hide-button" (click)="watched(i, item.id)">X</button>
+                    <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" />
+                    <div class="movie-title">{{item.title}} {{item.release_date | date:'LLL yyyy'}}</div>
+                </div>
             </div>
         </div>
         <button *ngIf="!category.isLoading" (click)="loadMore(i)" class="load-more">></button>
