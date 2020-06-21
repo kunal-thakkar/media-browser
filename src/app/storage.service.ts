@@ -53,10 +53,10 @@ export class StorageService {
       this.write(StorageKeys.MovieGenreKey, JSON.stringify(genres));
     });
     this.tmdbService.getCertifications(Category.Movie).subscribe(data=>{
-      let certifications = data["certifications"];
-      for(let k in certifications){
+      let certifications = {};
+      for(let k in data["certifications"]){
         let certs = {};
-        certifications[k].forEach(e => {
+        data["certifications"][k].forEach(e => {
           certs[e["certification"]] = e["certification"];
         });
         certifications[k] = certs;

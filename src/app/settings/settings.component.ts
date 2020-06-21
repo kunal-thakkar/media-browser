@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService, StorageKeys } from '../storage.service';
 import { Router } from '@angular/router';
-import { DiscoverOption } from '../discover.option';
 import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
@@ -46,18 +45,18 @@ export class SettingsComponent implements OnInit {
     'primary_release_date.lte': [],
     'with_genres': [],
     'with_original_language':[],
-    'sortBy':[]
+    'sort_by':[]
   });
 
   formFields = [
     {"key":"_title", "label":"Filter title", "type":"text"},
-    {"key":"certification_country", "label":"Certification Country", "type":"choice", "set":Object.keys(this.certifications)},
-    {"key":"certification", "label":"Certification", "type":"multi-choice", "set":""},
+    {"key":"certification_country", "label":"Certification Country", "type":"choice", "set":Object.keys(this.certifications||{})},
+    {"key":"certification", "label":"Certification", "type":"multi-choice", "set":[]},
     {"key":"primary_release_date.gte", "label":"Release Date Grater or Equal", "type":"date"},
     {"key":"primary_release_date.lte", "label":"Release Date Less or Equal", "type":"date"},
-    {"key":"with_genres", "label":"Genres", "type":"multi-choice", "set":this.storage.readJSON(StorageKeys.MovieGenreKey)},
+    {"key":"with_genres", "label":"Genres", "type":"multi-choice", "set":this.storage.readJSON(StorageKeys.MovieGenreKey)||[]},
     {"key":"with_original_language", "label":"Language", "type":"choice", "set":this.langOpt},
-    {"key":"sortBy", "label":"Sort By", "type":"choice", "set":this.sortBy},
+    {"key":"sort_by", "label":"Sort By", "type":"choice", "set":this.sortBy},
   ];
 
   discoverMovieFilters: Object[] = this.storage.readJSON(StorageKeys.DiscoverMovieFilters) || [];

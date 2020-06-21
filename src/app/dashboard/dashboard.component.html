@@ -1,5 +1,5 @@
 <input class="mySearch" type="text" id="mySearch" placeholder="Search ..">
-<div *ngFor="let category of categories; index as i; trackBy: trackByFn">
+<div *ngFor="let category of categories; index as i;">
     <div class="cat-label">{{category.title}}</div>
     <div class="scrollable">
         <div class="movie-info" *ngFor="let item of category.items">
