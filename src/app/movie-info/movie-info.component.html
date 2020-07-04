@@ -27,7 +27,7 @@
                 <div *ngFor="let cast of mediaInfo.credits.cast;">
                     <div class="info">
                         <a routerLink="/cast/{{cast.id}}">
-                            <img class="poster" src="{{castImgBaseUrl}}{{cast.profile_path}}" fallback="/assets/images/no-image.png" />
+                            <img class="poster" src="{{castImgBaseUrl}}{{cast.profile_path}}" fallback="assets/images/no-image.png" />
                         </a>
                         <div class="title">{{cast.character}}</div>
                         <div class="title">{{cast.name}}</div>
@@ -41,7 +41,7 @@
                 <div *ngFor="let crew of mediaInfo.credits.crew;">
                     <div class="info">
                         <a routerLink="/cast/{{crew.id}}">
-                            <img class="poster" src="{{castImgBaseUrl}}{{crew.profile_path}}" fallback="/assets/images/no-image.png" />
+                            <img class="poster" src="{{castImgBaseUrl}}{{crew.profile_path}}" fallback="assets/images/no-image.png" />
                         </a>
                         <div class="title">{{crew.department}}</div>
                         <div class="title">{{crew.name}}</div>
@@ -57,7 +57,7 @@
         <div *ngFor="let movie of mediaInfo.similar.results;">
             <div class="info">
                 <a routerLink="/movie/{{movie.id}}">
-                    <img class="poster" src="{{castImgBaseUrl}}{{movie.poster_path}}" fallback="/assets/images/no-image.png" />
+                    <img class="poster" src="{{castImgBaseUrl}}{{movie.poster_path}}" fallback="assets/images/no-image.png" />
                 </a>
                 <div class="title">{{movie.title}} {{movie.release_date | date:'yyyy'}}</div>
             </div>
