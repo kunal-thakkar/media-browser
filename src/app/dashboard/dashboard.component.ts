@@ -6,9 +6,10 @@ import { DiscoverOption } from '../discover.option';
 export interface Filters {
   title: string;
   index: number;
+  totalPages?: number;
   isLoading: boolean;
   items: any[];
-  filter: DiscoverOption;
+  filter?: DiscoverOption;
 }
 
 @Component({
@@ -23,6 +24,7 @@ export class DashboardComponent implements OnInit {
   private year = this.week * 52;
   private today = new Date();
 
+  searchText: string;
   imgBaseUrl = "";
   categories: Filters[] = [];
   watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
@@ -38,12 +40,26 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  search(){
+    this.tmdbService.search(Category.Movie, this.searchText).subscribe(d=>{
+      this.categories.unshift({
+        index:0,
+        totalPages: d.total_pages,
+        isLoading: false,
+        items: d.results,
+        title: `Search: ${this.searchText}`
+      });
+    });
+  }
+
   loadItems(cat: Category, e: Filters, page:number = 1){
+    if(!e.filter) return;
     let _f = e.filter;
     _f.page = page;
     this.tmdbService.discover(cat, _f).subscribe(data => {
       e.items.push(...data.results);
       e.index = page;
+      e.totalPages = data.total_pages;
       setTimeout(()=>{ e.isLoading = false }, 2000);
     });
   }

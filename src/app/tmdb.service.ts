@@ -83,4 +83,11 @@ export class TmdbService {
     }})
   }
 
+  search(c: Category, query: string): Observable<any>{
+    return this.http.get(`${this.tmdbBaseUrl}/search/${c}`, {params:{
+      api_key: this.apiKey,
+      query: query
+    }});
+  }
+
 }

@@ -1,4 +1,7 @@
-<input class="mySearch" type="text" id="mySearch" placeholder="Search ..">
+<div class="search">
+    <input type="text" [(ngModel)]="searchText" placeholder="Search ..">
+    <img src="assets/images/searchicon.png" (click)="search()">
+</div>
 <div *ngFor="let category of categories; index as i;">
     <div class="cat-label">{{category.title}}</div>
     <div class="scrollable">
@@ -13,6 +16,6 @@
                 </div>
             </div>
         </div>
-        <button *ngIf="!category.isLoading" (click)="loadMore(i)" class="load-more">></button>
+        <button *ngIf="category.index < (category.totalPages - 1) && !category.isLoading" (click)="loadMore(i)" class="load-more">></button>
     </div>
 </div>

@@ -1,20 +1,18 @@
-#mySearch {
-    background-image: url('/assets/images/searchicon.png');
-    /* Add a search icon to input */
-    background-position: 10px 12px;
-    /* Position the search icon */
-    background-repeat: no-repeat;
-    /* Do not repeat the icon image */
+.search input {
     width: calc(100% - 60px);
     /* Full-width */
     font-size: 16px;
     /* Increase font-size */
-    padding: 12px 20px 12px 40px;
+    padding: 10px;
     /* Add some padding */
     border: 1px solid #ddd;
     /* Add a grey border */
-    margin-bottom: 12px;
-    /* Add some space below the input */
+}
+
+.search img {
+    margin-left: 10px;
+    padding-top: 4px;
+    margin-bottom: -5px
 }
 
 div.scrollable {
