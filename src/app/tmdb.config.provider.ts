@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService, StorageKeys } from './storage.service';
 import { TmdbService, Category } from './tmdb.service';
 import { forkJoin } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class TmdbConfigProvider {
@@ -13,7 +14,7 @@ export class TmdbConfigProvider {
   //Will be called before application starts
   load() {
     return new Promise((resolve, reject) => {
-      this.service.setApiKey(this.storage.getTmdbKey());
+      this.service.setApiKey(environment.tmdbKey);
       forkJoin([
         this.service.getConfiguration(),
         this.service.getGenreList(Category.Movie),
