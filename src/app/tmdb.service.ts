@@ -76,4 +76,11 @@ export class TmdbService {
     return this.configuration.images.secure_base_url + this.configuration.images.poster_sizes[size];
   }
 
+  getCastInfo(id: number): Observable<any>{
+    return this.http.get(`${this.tmdbBaseUrl}/person/${id}`, {params:{
+      api_key: this.apiKey,
+      append_to_response: 'combined_credits'
+    }})
+  }
+
 }

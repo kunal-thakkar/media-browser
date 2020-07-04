@@ -15,6 +15,7 @@ import { CacheInterceptor } from './shared/cache.interceptor';
 import { MovieInfoComponent } from './movie-info/movie-info.component';
 import { TmdbConfigProvider } from './tmdb.config.provider';
 import { ImgFallBackDirective } from './common/ImgFallbackDirective';
+import { CastInfoComponent } from './cast-info/cast-info.component';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
@@ -27,7 +28,8 @@ export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
     DashboardComponent,
     SettingsComponent,
     MovieInfoComponent,
-    ImgFallBackDirective
+    ImgFallBackDirective,
+    CastInfoComponent
   ],
   imports: [
     BrowserModule,
