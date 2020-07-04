@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService, StorageKeys } from '../storage.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { TmdbService } from '../tmdb.service';
 
 @Component({
   selector: 'app-settings',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private router: Router, private storage: StorageService, private fb: FormBuilder) { }
+  constructor(private router: Router, private storage: StorageService, private fb: FormBuilder, private service: TmdbService) { }
 
   Object = Object;
   tmdbKey: string = this.storage.read(StorageKeys.TmdbApiKey);
@@ -85,6 +86,7 @@ export class SettingsComponent implements OnInit {
 
   saveSettings(){
     this.storage.setTmdbKey(this.tmdbKey);
+    this.service.setApiKey(this.tmdbKey);
     this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.discoverMovieFilters.filter(e=>e!=null));
     this.router.navigate(['/dashboard']);
   }

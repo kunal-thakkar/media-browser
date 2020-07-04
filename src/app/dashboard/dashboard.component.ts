@@ -30,13 +30,11 @@ export class DashboardComponent implements OnInit {
   constructor(private tmdbService: TmdbService, private storage: StorageService){}
 
   ngOnInit(){
-    this.tmdbService.configuration().subscribe(data=>{
-      this.imgBaseUrl = data.images.secure_base_url + data.images.poster_sizes[1];
-      this.storage.readJSON(StorageKeys.DiscoverMovieFilters).forEach((e: DiscoverOption, i) => {
-        let _filter = {index: 1, title: e["_title"], isLoading: true, filter: e, items: []};
-        this.categories.push(_filter);
-        this.loadItems(Category.Movie, _filter);
-      });
+    this.imgBaseUrl = this.tmdbService.getImgBaseUrl(1);
+    this.storage.readJSON(StorageKeys.DiscoverMovieFilters).forEach((e: DiscoverOption, i) => {
+      let _filter = {index: 1, title: e["_title"], isLoading: true, filter: e, items: []};
+      this.categories.push(_filter);
+      this.loadItems(Category.Movie, _filter);
     });
   }
 

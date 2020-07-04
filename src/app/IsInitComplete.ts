@@ -12,11 +12,8 @@ export class IsInitComplete {
   }
 
   resolve(): void {
-    if (this.storage.getTmdbKey()){
-        this.tmdbService.setApiKey(this.storage.getTmdbKey());
-    } 
-    else {
-        this.router.navigate(['/settings'])
+    if (!this.storage.getTmdbKey()){
+      this.router.navigate(['/settings'])
     }
   }
 }

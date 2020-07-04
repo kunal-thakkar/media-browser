@@ -1,0 +1,69 @@
+/* Mobile first development */
+
+.movie-poster img {
+    width: 100%;
+}
+
+.movie-info {
+    width: 100%;
+}
+
+.movie-title {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.movie-detail {
+    font-size: medium;
+    margin: 5px 0px;
+}
+
+.movie-detail span {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.movie-overview {
+    overflow: auto;
+}
+
+div.scrollable {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 5px 0px;
+    display: inline-flex;
+}
+
+div.scrollable .poster {
+    width: 100px;
+    height: 140px;
+    float: left;
+}
+
+div.scrollable .title {
+    white-space: normal;
+    width: 100px;
+}
+
+div.scrollable .info {
+    padding: 0px 2px;
+}
+
+
+/* Use a media query to add a breakpoint at 800px: */
+
+@media screen and (min-width: 600px) {
+    .container {
+        display: flex;
+    }
+    .movie-poster img {
+        width: 450px;
+        height: 670px;
+    }
+    .movie-info {
+        width: calc(100% - 460px);
+        margin-left: 10px;
+    }
+}

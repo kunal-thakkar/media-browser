@@ -6,7 +6,9 @@
             <div *ngIf="!isWatched(item.id) && item.poster_path">
                 <div class="movie-info">
                     <button class="hide-button" (click)="watched(i, item.id)">X</button>
-                    <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" />
+                    <a routerLink="/movie/{{item.id}}">
+                        <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" />
+                    </a>
                     <div class="movie-title">{{item.title}} {{item.release_date | date:'LLL yyyy'}}</div>
                 </div>
             </div>

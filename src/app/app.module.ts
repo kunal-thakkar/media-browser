@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,12 +12,22 @@ import { StorageService } from './storage.service';
 import { SettingsComponent } from './settings/settings.component';
 import { IsInitComplete } from './IsInitComplete';
 import { CacheInterceptor } from './shared/cache.interceptor';
+import { MovieInfoComponent } from './movie-info/movie-info.component';
+import { TmdbConfigProvider } from './tmdb.config.provider';
+import { ImgFallBackDirective } from './common/ImgFallbackDirective';
+
+
+export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
+  return () => provider.load();
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    SettingsComponent
+    SettingsComponent,
+    MovieInfoComponent,
+    ImgFallBackDirective
   ],
   imports: [
     BrowserModule,
@@ -26,8 +36,9 @@ import { CacheInterceptor } from './shared/cache.interceptor';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [IsInitComplete, StorageService, TmdbService,
-    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
+  providers: [IsInitComplete, StorageService, TmdbService, TmdbConfigProvider,
+    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
+    { provide: APP_INITIALIZER, useFactory: TmdbConfigProviderFactory, deps: [TmdbConfigProvider], multi: true }
   ],
   bootstrap: [AppComponent]
 })
