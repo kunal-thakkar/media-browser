@@ -1,18 +1,16 @@
 .search input {
-    width: calc(100% - 60px);
-    /* Full-width */
+    width: calc(100% - 45px);
     font-size: 16px;
-    /* Increase font-size */
     padding: 10px;
-    /* Add some padding */
+    padding-left: 35px;
     border: 1px solid #ddd;
-    /* Add a grey border */
+    background-color: white !important;
 }
 
 .search img {
     margin-left: 10px;
-    padding-top: 4px;
-    margin-bottom: -5px
+    padding-top: 10px;
+    position: absolute;
 }
 
 div.scrollable {
@@ -28,6 +26,10 @@ div.scrollable {
     font-size: x-large;
     margin: 15px 0px 0px 5px;
     font-weight: bolder;
+}
+
+.cat-label button {
+    float: right;
 }
 
 .movie-info {

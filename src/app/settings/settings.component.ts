@@ -14,7 +14,7 @@ export class SettingsComponent implements OnInit {
   constructor(private router: Router, private storage: StorageService, private fb: FormBuilder, private service: TmdbService) { }
 
   Object = Object;
-  tmdbKey: string = this.storage.read(StorageKeys.TmdbApiKey);
+  showForm = false;
   sortBy = {
     "popularity.asc": "Popularity Asc", 
     "popularity.desc": "Popularity Desc", 
@@ -85,8 +85,6 @@ export class SettingsComponent implements OnInit {
   }
 
   saveSettings(){
-    this.storage.setTmdbKey(this.tmdbKey);
-    this.service.setApiKey(this.tmdbKey);
     this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.discoverMovieFilters.filter(e=>e!=null));
     this.router.navigate(['/dashboard']);
   }

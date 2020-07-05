@@ -28,9 +28,9 @@ export class TmdbConfigProvider {
         });
         this.storage.writeJson(StorageKeys.MovieGenreKey, genres);
         let certifications = {};
-        for(let k in data[1]["certifications"]){
+        for(let k in data[2]["certifications"]){
           let certs = {};
-          data["certifications"][k].forEach(e => {
+          data[2]["certifications"][k].forEach(e => {
             certs[e["certification"]] = e["certification"];
           });
           certifications[k] = certs;

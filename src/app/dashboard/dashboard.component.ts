@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
   searchText: string;
   imgBaseUrl = "";
   categories: Filters[] = [];
+  searchResults: any = [];
   watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
 
   constructor(private tmdbService: TmdbService, private storage: StorageService){}
@@ -42,14 +43,22 @@ export class DashboardComponent implements OnInit {
 
   search(){
     this.tmdbService.search(Category.Movie, this.searchText).subscribe(d=>{
-      this.categories.unshift({
-        index:0,
-        totalPages: d.total_pages,
-        isLoading: false,
+      this.searchResults.unshift({
         items: d.results,
         title: `Search: ${this.searchText}`
       });
+      this.storage.writeJson(StorageKeys.SearchHistory, this.categories);
     });
+  }
+
+  removeSearch(i: number){
+    this.searchResults.splice(i, 1);
+    this.storage.writeJson(StorageKeys.SearchHistory, this.searchResults);
+  }
+
+  removeCat(i: number){
+    this.categories.splice(i, 1);
+    this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.categories);
   }
 
   loadItems(cat: Category, e: Filters, page:number = 1){

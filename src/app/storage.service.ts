@@ -8,7 +8,8 @@ export enum StorageKeys {
   MovieGenreKey = "movieGenreList",
   MovieCertificationsKey = "movieCertificationsList",
   DiscoverMovieFilters = "discoverMovieFilters",
-  Configuration = "configuration"
+  Configuration = "configuration",
+  SearchHistory = "searchHistory"
 }
 
 @Injectable({

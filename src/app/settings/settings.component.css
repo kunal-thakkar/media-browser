@@ -35,8 +35,27 @@ tr:nth-child(even) {
     display: inline-block;
 }
 
-input {
+select {
     width: 100%;
+}
+
+input[type="text"],
+input[type="date"] {
+    width: calc(100% - 6px);
+}
+
+.row-100 button {
+    width: 100%;
+}
+
+.label {
+    padding: 4px 0px 8px 4px;
+    font-size: medium;
+    font-weight: bold;
+}
+
+.label button {
+    float: right;
 }
 
 @media screen and (max-width: 600px) {
