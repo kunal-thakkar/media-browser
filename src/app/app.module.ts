@@ -10,7 +10,6 @@ import { TmdbService } from './tmdb.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StorageService } from './storage.service';
 import { SettingsComponent } from './settings/settings.component';
-import { IsInitComplete } from './IsInitComplete';
 import { CacheInterceptor } from './shared/cache.interceptor';
 import { MovieInfoComponent } from './movie-info/movie-info.component';
 import { TmdbConfigProvider } from './tmdb.config.provider';
@@ -38,7 +37,7 @@ export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [IsInitComplete, StorageService, TmdbService, TmdbConfigProvider,
+  providers: [StorageService, TmdbService, TmdbConfigProvider,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
     { provide: APP_INITIALIZER, useFactory: TmdbConfigProviderFactory, deps: [TmdbConfigProvider], multi: true }
   ],
