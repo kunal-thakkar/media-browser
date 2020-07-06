@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(){
     this.imgBaseUrl = this.tmdbService.getImgBaseUrl(1);
-    this.storage.readJSON(StorageKeys.DiscoverMovieFilters).forEach((e: DiscoverOption, i) => {
+    (this.storage.readJSON(StorageKeys.DiscoverMovieFilters) || []).forEach((e: DiscoverOption, i) => {
       let _filter = {index: 1, title: e["_title"], isLoading: true, filter: e, items: []};
       this.categories.push(_filter);
       this.loadItems(Category.Movie, _filter);
