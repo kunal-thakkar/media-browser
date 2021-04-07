@@ -2,5 +2,11 @@
     <li><a routerLink="/">Home</a></li>
     <li class="settings"><a routerLink="/settings">Settings</a></li>
 </ul>
+<div *ngIf="auth.user | async as user; else showLogin">
+    <button (click)="logout()">Logout</button>
+</div>
+<ng-template #showLogin>
+    <button (click)="login()">Login</button>
+</ng-template>
 <router-outlet>
 </router-outlet>

@@ -15,6 +15,9 @@ import { MovieInfoComponent } from './movie-info/movie-info.component';
 import { TmdbConfigProvider } from './tmdb.config.provider';
 import { ImgFallBackDirective } from './common/ImgFallbackDirective';
 import { CastInfoComponent } from './cast-info/cast-info.component';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
@@ -35,7 +38,9 @@ export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
   ],
   providers: [StorageService, TmdbService, TmdbConfigProvider,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },

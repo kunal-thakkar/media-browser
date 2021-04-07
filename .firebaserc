@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "avyukta-media-browser": {
+      "hosting": {
+        "MediaBrowser": [
+          "avyukta-media-browser"
+        ]
+      }
+    }
+  }
+}
