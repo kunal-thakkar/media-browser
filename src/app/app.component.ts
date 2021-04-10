@@ -9,6 +9,11 @@ import firebase from 'firebase/app';
 })
 export class AppComponent {
 
+  navList = [
+    { "icon": "home", "text": "Home", "routerLink": "/" },
+    { "icon": "settings", "text": "Settings", "routerLink": "/settings"}
+  ];
+
   constructor(public auth: AngularFireAuth) { }
 
   ngOnInit() {

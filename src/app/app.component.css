@@ -17,3 +17,13 @@ li a {
     display: block;
     padding: 8px;
 }
+
+.right-menu-item {
+    float: right;
+}
+
+@media screen and (max-width: 960px) {
+    .right-menu-item {
+        float: left;
+    }    
+}

@@ -18,6 +18,13 @@ import { CastInfoComponent } from './cast-info/cast-info.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
@@ -40,7 +47,14 @@ export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatSidenavModule,
+    FlexLayoutModule
   ],
   providers: [StorageService, TmdbService, TmdbConfigProvider,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
