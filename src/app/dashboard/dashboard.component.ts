@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { TmdbService, Category } from './../tmdb.service';
 import { StorageService, StorageKeys } from '../storage.service';
 import { DiscoverOption } from '../discover.option';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 export interface Filters {
   title: string;
@@ -30,9 +31,11 @@ export class DashboardComponent implements OnInit {
   searchResults: any = [];
   watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
 
-  constructor(private tmdbService: TmdbService, private storage: StorageService){}
+  constructor(private tmdbService: TmdbService, private storage: StorageService,
+    private analytics: AngularFireAnalytics){}
 
   ngOnInit(){
+    this.analytics.logEvent('Dashboard loaded');
     this.imgBaseUrl = this.tmdbService.getImgBaseUrl(1);
     this.searchResults = this.storage.readJSON(StorageKeys.SearchHistory) || [];
     (this.storage.readJSON(StorageKeys.DiscoverMovieFilters) || []).forEach((e: DiscoverOption, i) => {
