@@ -33,7 +33,7 @@
             <th>Action</th>
         </tr>
         <tr *ngFor="let filter of discoverMovieFilters; index as i;">
-            <td>{{filter._title}}</td>
+            <td>{{filter.title}}</td>
             <td><button (click)="removeFilter(i)">Delete</button></td>
         </tr>
     </table>

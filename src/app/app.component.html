@@ -11,7 +11,7 @@
         <a *ngFor="let nav of navList" routerLink="{{nav.routerLink}}" mat-button>
             <mat-icon>{{nav.icon}}</mat-icon>{{nav.text}}
         </a>
-        <button *ngIf="auth.user | async as user; else showLogin" (click)="logout()" class="right-menu-item" mat-button>
+        <button *ngIf="user; else showLogin" (click)="logout()" class="right-menu-item" mat-button>
             <mat-icon>logout</mat-icon>Logout
         </button>
         <ng-template #showLogin>
@@ -29,7 +29,7 @@
         <a *ngFor="let nav of navList" routerLink="{{nav.routerLink}}" mat-list-item>
         <mat-icon>{{nav.icon}}</mat-icon> {{nav.text}}
         </a>
-        <button *ngIf="auth.user | async as user; else showLogin" (click)="logout()" mat-list-item>
+        <button *ngIf="user; else showLogin" (click)="logout()" mat-list-item>
             <mat-icon>logout</mat-icon>Logout
         </button>
         <ng-template #showLogin>

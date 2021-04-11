@@ -3,14 +3,15 @@ import { TmdbService, Category } from './../tmdb.service';
 import { StorageService, StorageKeys } from '../storage.service';
 import { DiscoverOption } from '../discover.option';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
+import { FirebaseService } from '../firebase.service';
 
 export interface Filters {
   title: string;
-  index: number;
+  index?: number;
   totalPages?: number;
-  isLoading: boolean;
-  items: any[];
-  filter?: DiscoverOption;
+  isLoading?: boolean;
+  items?: any[];
+  discoverOption?: DiscoverOption;
 }
 
 @Component({
@@ -32,16 +33,19 @@ export class DashboardComponent implements OnInit {
   watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
 
   constructor(private tmdbService: TmdbService, private storage: StorageService,
-    private analytics: AngularFireAnalytics){}
+    private analytics: AngularFireAnalytics, private firebaseService: FirebaseService){}
 
   ngOnInit(){
     this.analytics.logEvent('Dashboard loaded');
     this.imgBaseUrl = this.tmdbService.getImgBaseUrl(1);
     this.searchResults = this.storage.readJSON(StorageKeys.SearchHistory) || [];
-    (this.storage.readJSON(StorageKeys.DiscoverMovieFilters) || []).forEach((e: DiscoverOption, i) => {
-      let _filter = {index: 1, title: e["_title"], isLoading: true, filter: e, items: []};
-      this.categories.push(_filter);
-      this.loadItems(Category.Movie, _filter);
+    this.storage.filtersSubject.subscribe((movieFilters: Filters[]) => {
+      this.categories = [];
+      movieFilters.forEach(filter => {
+        let _filter: Filters = Object.assign({}, filter, {index: 1, isLoading: true, items: []});
+        this.categories.push(_filter);
+        this.loadItems(Category.Movie, _filter);
+      });
     });
   }
 
@@ -66,8 +70,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadItems(cat: Category, e: Filters, page:number = 1){
-    if(!e.filter) return;
-    let _f = e.filter;
+    if(!e.discoverOption) return;
+    let _f = e.discoverOption;
     _f.page = page;
     this.tmdbService.discover(cat, _f).subscribe(data => {
       e.items.push(...data.results);

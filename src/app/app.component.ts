@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import firebase from 'firebase/app';
+import { FirebaseService } from './firebase.service';
+import firebase from 'node_modules/firebase'
 
 @Component({
   selector: 'app-root',
@@ -9,22 +10,27 @@ import firebase from 'firebase/app';
 })
 export class AppComponent {
 
+  user: firebase.User;
+
   navList = [
     { "icon": "home", "text": "Home", "routerLink": "/" },
     { "icon": "settings", "text": "Settings", "routerLink": "/settings"}
   ];
 
-  constructor(public auth: AngularFireAuth) { }
+  constructor(private firebaseService: FirebaseService) { }
 
   ngOnInit() {
+    this.firebaseService.user.subscribe(user => {
+      this.user = user;
+    });
   }
   
   login() {
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.firebaseService.login();
   }
 
   logout() {
-    this.auth.signOut();
+    this.firebaseService.logout();
   }
 }
 

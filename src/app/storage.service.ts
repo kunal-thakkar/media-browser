@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Preferences } from './models/preference.model';
+import { BehaviorSubject } from 'rxjs';
+import { Filters } from './dashboard/dashboard.component';
 import { Category } from './tmdb.service';
 
 export enum StorageKeys {
@@ -17,7 +18,7 @@ export enum StorageKeys {
 })
 export class StorageService {
 
-
+  filtersSubject: BehaviorSubject<Filters[]> = new BehaviorSubject<Filters[]>([]);
   constructor() {}
 
   public read(key: string):any{
@@ -46,15 +47,6 @@ export class StorageService {
 
   getTmdbKey(): string{
     return this.read(StorageKeys.TmdbApiKey);
-  }
-
-  loadPreferences():Preferences{
-    let _p = this.read(StorageKeys.PreferenceKey);
-    return _p ? JSON.parse(_p) : new Preferences();
-  }
-
-  savePreferences(p: Preferences){
-    this.write(StorageKeys.PreferenceKey, JSON.stringify(p));
   }
 
   addWatchedId(cat: Category, id: number){
