@@ -19,6 +19,7 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAnalyticsModule, ScreenTrackingService } from '@angular/fire/analytics';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -26,10 +27,15 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { FirebaseService } from './firebase.service';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
   return () => provider.load();
+}
+
+export function FirebaseAuthProviderFactory(service: FirebaseService ) {
+  return () => service._auth();
 }
 
 @NgModule({
@@ -50,6 +56,7 @@ export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireAnalyticsModule,
+    AngularFireStorageModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
@@ -58,9 +65,10 @@ export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
     MatSidenavModule,
     FlexLayoutModule
   ],
-  providers: [StorageService, TmdbService, TmdbConfigProvider, ScreenTrackingService,
+  providers: [StorageService, TmdbService, TmdbConfigProvider, FirebaseService, ScreenTrackingService,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
-    { provide: APP_INITIALIZER, useFactory: TmdbConfigProviderFactory, deps: [TmdbConfigProvider], multi: true }
+    { provide: APP_INITIALIZER, useFactory: TmdbConfigProviderFactory, deps: [TmdbConfigProvider], multi: true },
+    { provide: APP_INITIALIZER, useFactory: FirebaseAuthProviderFactory, deps: [FirebaseService], multi: true }
   ],
   bootstrap: [AppComponent]
 })

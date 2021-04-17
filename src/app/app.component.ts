@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { FirebaseService } from './firebase.service';
 import firebase from 'node_modules/firebase'
+import { FirebaseService } from './firebase.service';
 
 @Component({
   selector: 'app-root',

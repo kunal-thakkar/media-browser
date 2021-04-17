@@ -24,6 +24,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ## Helpful links
 `https://devblog.dymel.pl/2017/10/17/angular-preload/`
+`https://indepth.dev/posts/1215/implement-google-sign-in-oauth-in-your-angular-app-in-under-15-minutes-2`
 
 ## Further help
 

@@ -3,7 +3,6 @@ import { TmdbService, Category } from './../tmdb.service';
 import { StorageService, StorageKeys } from '../storage.service';
 import { DiscoverOption } from '../discover.option';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
-import { FirebaseService } from '../firebase.service';
 
 export interface Filters {
   title: string;
@@ -33,7 +32,7 @@ export class DashboardComponent implements OnInit {
   watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
 
   constructor(private tmdbService: TmdbService, private storage: StorageService,
-    private analytics: AngularFireAnalytics, private firebaseService: FirebaseService){}
+    private analytics: AngularFireAnalytics){}
 
   ngOnInit(){
     this.analytics.logEvent('Dashboard loaded');

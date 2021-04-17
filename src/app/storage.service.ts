@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Filters } from './dashboard/dashboard.component';
 import { Category } from './tmdb.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import firebase from "node_modules/firebase";
+import { HttpClient } from '@angular/common/http';
+import { take } from 'rxjs/operators';
+import { FirebaseService } from './firebase.service';
 
 export enum StorageKeys {
   PreferenceKey = 'preferences',
@@ -19,7 +24,27 @@ export enum StorageKeys {
 export class StorageService {
 
   filtersSubject: BehaviorSubject<Filters[]> = new BehaviorSubject<Filters[]>([]);
-  constructor() {}
+  private user: firebase.User;
+
+  constructor(private firebaseService: FirebaseService, private fireStorage: AngularFireStorage,
+    private http: HttpClient) {
+    firebaseService.user.subscribe(user => {
+      this.user = user;
+      if(user != null) {
+        this.fireStorage.ref(this.user.email + "/" + StorageKeys.DiscoverMovieFilters)
+          .getDownloadURL()
+          .pipe(take(1))
+          .subscribe(url => {
+            this.http.get(url).subscribe((obj: Filters[]) => {
+              this.filtersSubject.next(obj);
+            });
+        });
+      }
+      else {
+        this.filtersSubject.next(this.readJSON(StorageKeys.DiscoverMovieFilters));
+      }
+    });
+  }
 
   public read(key: string):any{
     return localStorage.getItem(key);
@@ -34,7 +59,14 @@ export class StorageService {
   }
 
   public writeJson(key: string, val: any){
-    this.write(key, JSON.stringify(val));
+    if(this.user && key == StorageKeys.DiscoverMovieFilters) {
+      var jsonString = JSON.stringify(val);
+      var blob = new Blob([jsonString], {type: "application/json"})
+      this.fireStorage.ref(this.user.email + "/" + key).put(blob);
+    }
+    else {
+      this.write(key, JSON.stringify(val));
+    }
   }
 
   private del(key: string){
