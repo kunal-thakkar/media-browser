@@ -1,8 +1,12 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { TmdbService, Category } from './../tmdb.service';
 import { StorageService, StorageKeys } from '../storage.service';
 import { DiscoverOption } from '../discover.option';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
+import { FormControl } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 export interface Filters {
   title: string;
@@ -11,6 +15,8 @@ export interface Filters {
   isLoading?: boolean;
   items?: any[];
   discoverOption?: DiscoverOption;
+  isCustom?: boolean;
+  showOnDashboard?: boolean;
 }
 
 @Component({
@@ -32,7 +38,7 @@ export class DashboardComponent implements OnInit {
   watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
 
   constructor(private tmdbService: TmdbService, private storage: StorageService,
-    private analytics: AngularFireAnalytics){}
+    private analytics: AngularFireAnalytics, public dialog: MatDialog){}
 
   ngOnInit(){
     this.analytics.logEvent('Dashboard loaded');
@@ -99,4 +105,69 @@ export class DashboardComponent implements OnInit {
       this.loadItems(Category.Movie, this.categories[i], ++this.categories[i].index);
     }
   }
+
+  openDialog($event, i, id): void {
+    const dialogRef = this.dialog.open(AddToCategoryDialog, {
+      width: '250px',
+      data: {
+        category: '',
+        options: this.categories.filter((f: Filters) => f.isCustom).map((f:Filters) => f.title)
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      let filter: Filters[] = this.categories.filter((f:Filters)=> f.title === result);
+      let item: any = this.categories[id].items.splice(id, 1);
+      if(filter.length == 0) {
+        this.categories.push({
+          title: result,
+          isCustom: true,
+          items: [item]
+        })
+      }
+      else {
+        filter[0].items.push(item)
+      }
+      this.storage.filtersSubject.next(this.categories);
+      this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.categories);
+    });
+  }
+
+}
+
+export interface DialogData {
+  category: string;
+  options: string[];
+}
+
+@Component({
+  selector: 'category-dialog',
+  templateUrl: 'category-dialog.html',
+})
+export class AddToCategoryDialog implements OnInit {
+
+  categoryInput: FormControl = new FormControl();
+  filteredOptions: Observable<string[]>;
+
+  constructor(
+    public dialogRef: MatDialogRef<AddToCategoryDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  ngOnInit() {
+    this.filteredOptions = this.categoryInput.valueChanges.pipe(
+      map(value => this.data.category = value),
+      startWith(''),
+      map(value => this._filter(value))
+    )
+  }
+
+  private _filter(value): string[] {
+    const filterValue = value.toLowerCase();
+    return this.data.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }

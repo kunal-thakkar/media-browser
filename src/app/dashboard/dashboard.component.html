@@ -11,7 +11,7 @@
             <div *ngFor="let item of search.items;">
                 <div *ngIf="!isWatched(item.id)">
                     <div class="movie-info">
-                        <button class="hide-button" (click)="watched(i, item.id)">X</button>
+                        <button mat-button (click)="openDialog($event, i, item.id)" class="hide-button">+</button>
                         <a routerLink="/movie/{{item.id}}">
                             <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
                         </a>
@@ -30,7 +30,7 @@
         <div *ngFor="let item of category.items;">
             <div *ngIf="!isWatched(item.id)">
                 <div class="movie-info">
-                    <button class="hide-button" (click)="watched(i, item.id)">X</button>
+                    <button mat-button (click)="openDialog($event, i, item.id)" class="hide-button">+</button>
                     <a routerLink="/movie/{{item.id}}">
                         <img class="movie-poster" src="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
                     </a>

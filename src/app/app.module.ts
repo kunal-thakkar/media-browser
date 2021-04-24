@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TmdbService } from './tmdb.service';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { AddToCategoryDialog, DashboardComponent } from './dashboard/dashboard.component';
 import { StorageService } from './storage.service';
 import { SettingsComponent } from './settings/settings.component';
 import { CacheInterceptor } from './shared/cache.interceptor';
@@ -27,6 +27,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from "@angular/material/input";
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field'
 import { FirebaseService } from './firebase.service';
 
 
@@ -45,7 +49,8 @@ export function FirebaseAuthProviderFactory(service: FirebaseService ) {
     SettingsComponent,
     MovieInfoComponent,
     ImgFallBackDirective,
-    CastInfoComponent
+    CastInfoComponent,
+    AddToCategoryDialog
   ],
   imports: [
     BrowserModule,
@@ -63,6 +68,10 @@ export function FirebaseAuthProviderFactory(service: FirebaseService ) {
     MatIconModule,
     MatListModule,
     MatSidenavModule,
+    MatDialogModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
     FlexLayoutModule
   ],
   providers: [StorageService, TmdbService, TmdbConfigProvider, FirebaseService, ScreenTrackingService,
