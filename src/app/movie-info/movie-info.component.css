@@ -51,6 +51,20 @@ div.scrollable .info {
     padding: 0px 2px;
 }
 
+.google-search-item {
+    display: unset;
+    padding: 10px 0px;
+}
+
+.google-search-item .description {
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.google-search-result {
+    display: inline-grid;
+}
+
 
 /* Use a media query to add a breakpoint at 800px: */
 
@@ -65,5 +79,9 @@ div.scrollable .info {
     .movie-info {
         width: calc(100% - 460px);
         margin-left: 10px;
+    }
+    .google-search-item {
+        display: inline-flex;
+        padding: 10px 5px;
     }
 }

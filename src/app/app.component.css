@@ -22,6 +22,14 @@ li a {
     float: right;
 }
 
+.mat-sidenav-container {
+    min-width: calc(100% - 22px);
+    width: calc(100% - 22px);
+    margin: 10px;
+    min-height: calc(100% - 22px);
+    height: calc(100% - 22px);
+}
+
 @media screen and (max-width: 960px) {
     .right-menu-item {
         float: left;

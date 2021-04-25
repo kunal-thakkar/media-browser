@@ -32,7 +32,6 @@
                         <a routerLink="/movie/{{cast.id}}">
                             <img class="poster" src="{{smallImgBaseUrl}}{{cast.poster_path}}" fallback="assets/images/no-image.png" />
                         </a>
-                        <div class="title">{{cast.character}}</div>
                         <div class="title">{{cast.title}} {{cast.release_date | date:'yyyy'}}</div>
                     </div>
                 </div>
@@ -46,7 +45,6 @@
                         <a routerLink="/movie/{{crew.id}}">
                             <img class="poster" src="{{smallImgBaseUrl}}{{crew.poster_path}}" fallback="assets/images/no-image.png" />
                         </a>
-                        <div class="title">{{crew.job}}</div>
                         <div class="title">{{crew.title}}</div>
                     </div>
                 </div>

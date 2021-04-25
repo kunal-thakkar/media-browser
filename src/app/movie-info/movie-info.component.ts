@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TmdbService, Category } from '../tmdb.service';
 import { ActivatedRoute } from '@angular/router';
+import { FirebaseService } from '../firebase.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-info',
@@ -14,8 +16,9 @@ export class MovieInfoComponent implements OnInit {
   imgBaseUrl: string;
   castImgBaseUrl: string;
   spoken_languages: string;
+  googleSearchResult: any;
 
-  constructor(private service: TmdbService, private router: ActivatedRoute) { }
+  constructor(private service: TmdbService, private router: ActivatedRoute, private firebaseService: FirebaseService) { }
 
   ngOnInit() {
     this.imgBaseUrl = this.service.getImgBaseUrl(4);
@@ -30,6 +33,10 @@ export class MovieInfoComponent implements OnInit {
           let _spoken_languages = [];
           d.spoken_languages.forEach(l=>_spoken_languages.push(l.name))
           this.spoken_languages = _spoken_languages.join(", ");
+          this.firebaseService
+            .search(this.mediaInfo.title)
+            .pipe(take(1))
+            .subscribe(data => this.googleSearchResult = data);
         });
       }
     });

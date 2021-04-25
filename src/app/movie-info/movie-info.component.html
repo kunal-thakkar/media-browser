@@ -29,7 +29,6 @@
                         <a routerLink="/cast/{{cast.id}}">
                             <img class="poster" src="{{castImgBaseUrl}}{{cast.profile_path}}" fallback="assets/images/no-image.png" />
                         </a>
-                        <div class="title">{{cast.character}}</div>
                         <div class="title">{{cast.name}}</div>
                     </div>
                 </div>
@@ -60,6 +59,18 @@
                     <img class="poster" src="{{castImgBaseUrl}}{{movie.poster_path}}" fallback="assets/images/no-image.png" />
                 </a>
                 <div class="title">{{movie.title}} {{movie.release_date | date:'yyyy'}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="googleSearchResult && googleSearchResult.items">
+    <div class="movie-detail"><span>Watch Online Search Powered by Google</span></div>
+    <div class="google-search-result">
+        <div *ngFor="let item of googleSearchResult.items;" class="google-search-item">
+            <div class="google-search-details">
+                <div class="title" [innerHtml]="item.htmlTitle"></div>
+                <div class="description" [innerHtml]="item.htmlSnippet"></div>
+                <div class="link"><a href="{{item.link}}" target="_blank">{{item.displayLink}}</a></div>
             </div>
         </div>
     </div>
