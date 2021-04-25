@@ -77,6 +77,7 @@ export class SettingsComponent implements OnInit {
   addFilter(){
     this.discoverMovieFilters.push({
       title: this.fg.get("_title").value,
+      items: [],
       discoverOption: this.fg.getRawValue()
     });
   }

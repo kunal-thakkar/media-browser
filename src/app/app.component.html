@@ -1,4 +1,4 @@
-<div>
+<div class="toolbar">
     <mat-toolbar color="primary">
         <mat-toolbar-row>
             <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
@@ -26,7 +26,7 @@
         <mat-sidenav #sidenav>
             <mat-nav-list>
                 <a *ngFor="let nav of navList" routerLink="{{nav.routerLink}}" mat-list-item>
-                <mat-icon>{{nav.icon}}</mat-icon> {{nav.text}}
+                    <mat-icon>{{nav.icon}}</mat-icon> {{nav.text}}
                 </a>
                 <button *ngIf="user; else showLogin" (click)="logout()" mat-list-item>
                     <mat-icon>logout</mat-icon>Logout

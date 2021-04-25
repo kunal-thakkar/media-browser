@@ -25,5 +25,8 @@ li a {
 @media screen and (max-width: 960px) {
     .right-menu-item {
         float: left;
-    }    
+    }
+    .toolbar {
+        height: 100%;
+    }
 }

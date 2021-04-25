@@ -59,10 +59,22 @@ export class StorageService {
   }
 
   public writeJson(key: string, val: any){
-    if(this.user && key == StorageKeys.DiscoverMovieFilters) {
-      var jsonString = JSON.stringify(val);
-      var blob = new Blob([jsonString], {type: "application/json"})
-      this.fireStorage.ref(this.user.email + "/" + key).put(blob);
+    if(key == StorageKeys.DiscoverMovieFilters) {
+      let _val: Filters[] = val.map(i => {
+        let _i: Filters = Object.assign({}, i);
+        ["index", "totalPages", "isLoading"].forEach(k => delete _i[k])
+        return _i;
+      });
+      _val.filter(i => (i.isCustom === undefined || i.isCustom !== true)).map(i => i.items = []);
+      if(this.user) {
+        var jsonString = JSON.stringify(_val);
+        var blob = new Blob([jsonString], {type: "application/json"})
+        this.fireStorage.ref(this.user.email + "/" + key).put(blob);
+      }
+      else {
+        this.write(key, JSON.stringify(_val));
+      }
+      this.filtersSubject.next(val);
     }
     else {
       this.write(key, JSON.stringify(val));
@@ -81,12 +93,5 @@ export class StorageService {
     return this.read(StorageKeys.TmdbApiKey);
   }
 
-  addWatchedId(cat: Category, id: number){
-    this.writeJson(`watched_${cat}`, (this.readJSON(`watched_${cat}`)||[]).concat(id));
-  }
-
-  getWatchedIds(cat: Category){
-    return this.readJSON(`watched_${cat}`) || [];
-  }
 
 }

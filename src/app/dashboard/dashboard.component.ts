@@ -6,11 +6,11 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 export interface Filters {
-  title: string;
   index?: number;
+  title: string;
   totalPages?: number;
   isLoading?: boolean;
   items?: any[];
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
   imgBaseUrl = "";
   categories: Filters[] = [];
   searchResults: any = [];
-  watchedIds: number[] = this.storage.getWatchedIds(Category.Movie);
+  customFilterMediaIds: number[] = [];
 
   constructor(private tmdbService: TmdbService, private storage: StorageService,
     private analytics: AngularFireAnalytics, public dialog: MatDialog){}
@@ -46,10 +46,15 @@ export class DashboardComponent implements OnInit {
     this.searchResults = this.storage.readJSON(StorageKeys.SearchHistory) || [];
     this.storage.filtersSubject.subscribe((movieFilters: Filters[]) => {
       this.categories = [];
-      movieFilters.forEach(filter => {
-        let _filter: Filters = Object.assign({}, filter, {index: 1, isLoading: true, items: []});
+      this.customFilterMediaIds = [];
+      (movieFilters || [])
+        .filter(filter => filter.isCustom)
+        .forEach(filter => this.customFilterMediaIds.push(...filter.items.map(item => item.id)));
+      (movieFilters || []).forEach(filter => {
+        let _filter: Filters = Object.assign({}, filter, {isLoading: true});
         this.categories.push(_filter);
-        this.loadItems(Category.Movie, _filter);
+        if(_filter.discoverOption)
+          this.loadItems(Category.Movie, _filter);
       });
     });
   }
@@ -74,25 +79,14 @@ export class DashboardComponent implements OnInit {
     this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.categories);
   }
 
-  loadItems(cat: Category, e: Filters, page:number = 1){
-    if(!e.discoverOption) return;
-    let _f = e.discoverOption;
-    _f.page = page;
-    this.tmdbService.discover(cat, _f).subscribe(data => {
-      e.items.push(...data.results);
-      e.index = page;
+  loadItems(cat: Category, e: Filters){
+    if(!e.discoverOption || e.index === (e.discoverOption.page || 1)) return;
+    this.tmdbService.discover(cat, e.discoverOption).subscribe(data => {
+      e.items.push(...data.results.filter(item => !this.customFilterMediaIds.includes(item.id)));
+      e.index = e.discoverOption.page;
       e.totalPages = data.total_pages;
       setTimeout(()=>{ e.isLoading = false }, 2000);
     });
-  }
-
-  isWatched(id: number): boolean {
-    return this.watchedIds.includes(id);
-  }
-
-  watched(catIdx: number, itemId: number){
-    this.watchedIds.push(itemId);
-    this.storage.addWatchedId(Category.Movie, itemId);
   }
 
   formatDate(d: Date):String{
@@ -102,11 +96,12 @@ export class DashboardComponent implements OnInit {
 
   loadMore(i:number){
     if(!this.categories[i].isLoading){
-      this.loadItems(Category.Movie, this.categories[i], ++this.categories[i].index);
+      this.categories[i].discoverOption.page++;
+      this.loadItems(Category.Movie, this.categories[i]);
     }
   }
 
-  openDialog($event, i, id): void {
+  openDialog($event, i, ii): void {
     const dialogRef = this.dialog.open(AddToCategoryDialog, {
       width: '250px',
       data: {
@@ -116,19 +111,19 @@ export class DashboardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if(!result) return;
       let filter: Filters[] = this.categories.filter((f:Filters)=> f.title === result);
-      let item: any = this.categories[id].items.splice(id, 1);
-      if(filter.length == 0) {
+      let item: any = this.categories[i].items.splice(ii, 1)[0];
+      if(filter.length > 0) {
+        filter[0].items.push(item);
+      }
+      else {
         this.categories.push({
           title: result,
           isCustom: true,
           items: [item]
-        })
+        });
       }
-      else {
-        filter[0].items.push(item)
-      }
-      this.storage.filtersSubject.next(this.categories);
       this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.categories);
     });
   }
