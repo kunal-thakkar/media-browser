@@ -21,73 +21,81 @@ export class TmdbService {
     this.apiKey = storage.getTmdbKey();
   }
 
-  private addQueryCriteria(query: String[], key: String, val: String){
-    if(Array.isArray(val)){
-      query.push(`${key}=`+val.join("|"));
+  private addQueryCriteria(query: String[], key: String, val: String) {
+    if (Array.isArray(val)) {
+      query.push(`${key}=` + val.join("|"));
     }
-    else if(typeof(val) == "number"){
+    else if (typeof (val) == "number") {
       query.push(`${key}=${val}`);
     }
-    else if(val.startsWith('<')) 
-      query.push(`${key}.lte=`+val.substr(1));
-    else if(val.startsWith('>')) 
-      query.push(`${key}.gte=`+val.substr(1));
-    else if(val.includes(':')){
+    else if (val.startsWith('<'))
+      query.push(`${key}.lte=` + val.substr(1));
+    else if (val.startsWith('>'))
+      query.push(`${key}.gte=` + val.substr(1));
+    else if (val.includes(':')) {
       let range = val.split(':');
-      query.push(`${key}.gte=`+range[0]);
-      query.push(`${key}.lte=`+range[1]);
+      query.push(`${key}.gte=` + range[0]);
+      query.push(`${key}.lte=` + range[1]);
     }
     else query.push(`${key}=${val}`);
   }
 
-  setApiKey(key: string){
+  setApiKey(key: string) {
     this.apiKey = key;
   }
 
-  setConfiguration(configuration: any){
+  setConfiguration(configuration: any) {
     this.configuration = configuration;
   }
 
-  discover(c: Category, o: DiscoverOption): Observable<any>{
-    let query = ["api_key="+this.apiKey];
-    for(let k in o){
-      if(o.hasOwnProperty(k) && o[k]) this.addQueryCriteria(query, k, o[k]);
+  discover(c: Category, o: DiscoverOption): Observable<any> {
+    let query = ["api_key=" + this.apiKey];
+    for (let k in o) {
+      if (o.hasOwnProperty(k) && o[k]) this.addQueryCriteria(query, k, o[k]);
     }
-    return this.http.get(`${this.tmdbBaseUrl}/discover/${c}?`+query.join("&"));
+    return this.http.get(`${this.tmdbBaseUrl}/discover/${c}?` + query.join("&"));
   }
 
-  getGenreList(c: Category){
+  getGenreList(c: Category) {
     return this.http.get(`${this.tmdbBaseUrl}/genre/${c}/list?api_key=${this.apiKey}`);
   }
 
-  getCertifications(c: Category){
+  getCertifications(c: Category) {
     return this.http.get(`${this.tmdbBaseUrl}/certification/${c}/list?api_key=${this.apiKey}`);
   }
 
-  getInfo(c: Category, id: number): Observable<any>{
+  getInfo(c: Category, id: number): Observable<any> {
     return this.http.get(`${this.tmdbBaseUrl}/${c}/${id}?api_key=${this.apiKey}&append_to_response=credits,similar`);
   }
 
-  getConfiguration():Observable<any>{
-    return this.http.get(`${this.tmdbBaseUrl}/configuration`, { params: {api_key: this.apiKey}});
+  getConfiguration(): Observable<any> {
+    return this.http.get(`${this.tmdbBaseUrl}/configuration`, { params: { api_key: this.apiKey } });
   }
 
-  getImgBaseUrl(size: number = 1): string{
+  getLanguages(): Observable<any> {
+    return this.http.get(`${this.tmdbBaseUrl}/configuration/languages`, { params: { api_key: this.apiKey } });
+  }
+
+  getImgBaseUrl(size: number = 1): string {
     return this.configuration.images.secure_base_url + this.configuration.images.poster_sizes[size];
   }
 
-  getCastInfo(id: number): Observable<any>{
-    return this.http.get(`${this.tmdbBaseUrl}/person/${id}`, {params:{
-      api_key: this.apiKey,
-      append_to_response: 'combined_credits'
-    }})
+  getCastInfo(id: number): Observable<any> {
+    return this.http.get(`${this.tmdbBaseUrl}/person/${id}`, {
+      params: {
+        api_key: this.apiKey,
+        append_to_response: 'combined_credits'
+      }
+    })
   }
 
-  search(c: Category, query: string): Observable<any>{
-    return this.http.get(`${this.tmdbBaseUrl}/search/${c}`, {params:{
-      api_key: this.apiKey,
-      query: query
-    }});
+  search(c: Category, query: string): Observable<any> {
+    return this.http.get(`${this.tmdbBaseUrl}/search/${c}`, {
+      params: {
+        api_key: this.apiKey,
+        query: query
+      }
+    });
   }
 
 }

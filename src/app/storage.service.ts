@@ -15,7 +15,8 @@ export enum StorageKeys {
   MovieCertificationsKey = "movieCertificationsList",
   DiscoverMovieFilters = "discoverMovieFilters",
   Configuration = "configuration",
-  SearchHistory = "searchHistory"
+  SearchHistory = "searchHistory",
+  Languages = "languages"
 }
 
 @Injectable({
@@ -30,7 +31,7 @@ export class StorageService {
     private http: HttpClient) {
     firebaseService.user.subscribe(user => {
       this.user = user;
-      if(user != null) {
+      if (user != null) {
         this.fireStorage.ref(this.user.email + "/" + StorageKeys.DiscoverMovieFilters)
           .getDownloadURL()
           .pipe(take(1))
@@ -38,7 +39,7 @@ export class StorageService {
             this.http.get(url).subscribe((obj: Filters[]) => {
               this.filtersSubject.next(obj);
             });
-        });
+          });
       }
       else {
         this.filtersSubject.next(this.readJSON(StorageKeys.DiscoverMovieFilters));
@@ -46,29 +47,29 @@ export class StorageService {
     });
   }
 
-  public read(key: string):any{
+  public read(key: string): any {
     return localStorage.getItem(key);
   }
 
-  public readJSON(key: string):any{
+  public readJSON(key: string): any {
     return JSON.parse(this.read(key));
   }
 
-  private write(key: string, val: any){
+  private write(key: string, val: any) {
     localStorage.setItem(key, val);
   }
 
-  public writeJson(key: string, val: any){
-    if(key == StorageKeys.DiscoverMovieFilters) {
+  public writeJson(key: string, val: any) {
+    if (key == StorageKeys.DiscoverMovieFilters) {
       let _val: Filters[] = val.map(i => {
         let _i: Filters = Object.assign({}, i);
         ["index", "totalPages", "isLoading"].forEach(k => delete _i[k])
         return _i;
       });
       _val.filter(i => (i.isCustom === undefined || i.isCustom !== true)).map(i => i.items = []);
-      if(this.user) {
+      if (this.user) {
         var jsonString = JSON.stringify(_val);
-        var blob = new Blob([jsonString], {type: "application/json"})
+        var blob = new Blob([jsonString], { type: "application/json" })
         this.fireStorage.ref(this.user.email + "/" + key).put(blob);
       }
       else {
@@ -81,15 +82,15 @@ export class StorageService {
     }
   }
 
-  private del(key: string){
+  private del(key: string) {
     localStorage.removeItem(key);
   }
 
-  setTmdbKey(key: string){
+  setTmdbKey(key: string) {
     this.write(StorageKeys.TmdbApiKey, key);
   }
 
-  getTmdbKey(): string{
+  getTmdbKey(): string {
     return this.read(StorageKeys.TmdbApiKey);
   }
 

@@ -18,7 +18,8 @@ export class TmdbConfigProvider {
       forkJoin([
         this.service.getConfiguration(),
         this.service.getGenreList(Category.Movie),
-        this.service.getCertifications(Category.Movie)
+        this.service.getCertifications(Category.Movie),
+        this.service.getLanguages()
       ]).subscribe(data => {
         this.service.setConfiguration(data[0]);
         this.storage.writeJson(StorageKeys.Configuration, data[0]);
@@ -28,7 +29,7 @@ export class TmdbConfigProvider {
         });
         this.storage.writeJson(StorageKeys.MovieGenreKey, genres);
         let certifications = {};
-        for(let k in data[2]["certifications"]){
+        for (let k in data[2]["certifications"]) {
           let certs = {};
           data[2]["certifications"][k].forEach(e => {
             certs[e["certification"]] = e["certification"];
@@ -36,6 +37,11 @@ export class TmdbConfigProvider {
           certifications[k] = certs;
         }
         this.storage.writeJson(StorageKeys.MovieCertificationsKey, certifications);
+        let languages = {};
+        data[3].forEach(e => {
+          languages[e["iso_639_1"]] = e["english_name"];
+        });
+        this.storage.writeJson(StorageKeys.Languages, languages);
         resolve(true);
       });
     });
