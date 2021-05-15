@@ -27,30 +27,6 @@
     overflow: auto;
 }
 
-div.scrollable {
-    width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
-    margin: 5px 0px;
-    display: inline-flex;
-}
-
-div.scrollable .poster {
-    width: 100px;
-    height: 140px;
-    float: left;
-}
-
-div.scrollable .title {
-    white-space: normal;
-    width: 100px;
-}
-
-div.scrollable .info {
-    padding: 0px 2px;
-}
-
 .google-search-item {
     display: unset;
     padding: 10px 0px;

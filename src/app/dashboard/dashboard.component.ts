@@ -26,7 +26,7 @@ export interface Filters {
 })
 export class DashboardComponent implements OnInit {
 
-  private day = 1000*60*60*24;
+  private day = 1000 * 60 * 60 * 24;
   private week = this.day * 7;
   private year = this.week * 52;
   private today = new Date();
@@ -38,9 +38,9 @@ export class DashboardComponent implements OnInit {
   customFilterMediaIds: number[] = [];
 
   constructor(private tmdbService: TmdbService, private storage: StorageService,
-    private analytics: AngularFireAnalytics, public dialog: MatDialog){}
+    private analytics: AngularFireAnalytics, public dialog: MatDialog) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.analytics.logEvent('Dashboard loaded');
     this.imgBaseUrl = this.tmdbService.getImgBaseUrl(1);
     this.searchResults = this.storage.readJSON(StorageKeys.SearchHistory) || [];
@@ -49,18 +49,18 @@ export class DashboardComponent implements OnInit {
       this.customFilterMediaIds = [];
       (movieFilters || [])
         .filter(filter => filter.isCustom)
-        .forEach(filter => this.customFilterMediaIds.push(...filter.items.map(item => item.id)));
+        .forEach(f => this.customFilterMediaIds.push(...f.items.filter(i => i != null).map(i => i.id)));
       (movieFilters || []).forEach(filter => {
-        let _filter: Filters = Object.assign({}, filter, {isLoading: true});
+        let _filter: Filters = Object.assign({}, filter, { isLoading: true });
         this.categories.push(_filter);
-        if(_filter.discoverOption)
+        if (_filter.discoverOption)
           this.loadItems(Category.Movie, _filter);
       });
     });
   }
 
-  search(){
-    this.tmdbService.search(Category.Movie, this.searchText).subscribe(d=>{
+  search() {
+    this.tmdbService.search(Category.Movie, this.searchText).subscribe(d => {
       this.searchResults.unshift({
         items: d.results,
         title: `Search: ${this.searchText}`
@@ -69,53 +69,55 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  removeSearch(i: number){
+  removeSearch(i: number) {
     this.searchResults.splice(i, 1);
     this.storage.writeJson(StorageKeys.SearchHistory, this.searchResults);
   }
 
-  removeCat(i: number){
+  removeCat(i: number) {
     this.categories.splice(i, 1);
     this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.categories);
   }
 
-  loadItems(cat: Category, e: Filters){
-    if(!e.discoverOption || e.index === (e.discoverOption.page || 1)) return;
+  loadItems(cat: Category, e: Filters) {
+    e.discoverOption.page = e.discoverOption.page || 1
+    if (!e.discoverOption || e.index === e.discoverOption.page) return;
     this.tmdbService.discover(cat, e.discoverOption).subscribe(data => {
       e.items.push(...data.results.filter(item => !this.customFilterMediaIds.includes(item.id)));
       e.index = e.discoverOption.page;
       e.totalPages = data.total_pages;
-      setTimeout(()=>{ e.isLoading = false }, 2000);
+      setTimeout(() => { e.isLoading = false }, 500);
     });
   }
 
-  formatDate(d: Date):String{
-    let format = (v)=>v < 10 ? "0"+v : v;
-    return d.getFullYear() + "-" + format(d.getMonth()+1) + "-" + format(d.getDate());
+  formatDate(d: Date): String {
+    let format = (v) => v < 10 ? "0" + v : v;
+    return d.getFullYear() + "-" + format(d.getMonth() + 1) + "-" + format(d.getDate());
   }
 
-  loadMore(i:number){
-    if(!this.categories[i].isLoading){
+  loadMore(i: number) {
+    if (!this.categories[i].isLoading) {
       this.categories[i].discoverOption.page++;
       this.loadItems(Category.Movie, this.categories[i]);
     }
   }
 
-  openDialog($event, i, ii): void {
+  openDialog(source, i): void {
     const dialogRef = this.dialog.open(AddToCategoryDialog, {
       width: '250px',
       data: {
-        category: '',
-        options: this.categories.filter((f: Filters) => f.isCustom).map((f:Filters) => f.title)
+        category: ''
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(!result) return;
-      let filter: Filters[] = this.categories.filter((f:Filters)=> f.title === result);
-      let item: any = this.categories[i].items.splice(ii, 1)[0];
-      if(filter.length > 0) {
-        filter[0].items.push(item);
+      if (!result) return;
+      let filter: Filters[] = this.categories.filter((f: Filters) => f.title === result);
+      let item: any = source.splice(i, 1)[0];
+      if (filter.length > 0) {
+        if (filter[0].items.filter(i => i.id === item.id).length === 0) {
+          filter[0].items.push(item);
+        }
       }
       else {
         this.categories.push({
@@ -132,7 +134,6 @@ export class DashboardComponent implements OnInit {
 
 export interface DialogData {
   category: string;
-  options: string[];
 }
 
 @Component({
@@ -143,12 +144,16 @@ export class AddToCategoryDialog implements OnInit {
 
   categoryInput: FormControl = new FormControl();
   filteredOptions: Observable<string[]>;
+  options: string[];
 
   constructor(
+    private storage: StorageService,
     public dialogRef: MatDialogRef<AddToCategoryDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit() {
+    this.options = this.storage.movieFilters.filter((f: Filters) => f.isCustom).map((f: Filters) => f.title);
+
     this.filteredOptions = this.categoryInput.valueChanges.pipe(
       map(value => this.data.category = value),
       startWith(''),
@@ -158,7 +163,7 @@ export class AddToCategoryDialog implements OnInit {
 
   private _filter(value): string[] {
     const filterValue = value.toLowerCase();
-    return this.data.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   onNoClick(): void {

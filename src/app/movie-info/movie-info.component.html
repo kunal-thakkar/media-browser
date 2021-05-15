@@ -21,7 +21,7 @@
                 <div class="movie-overview">{{mediaInfo.overview}}</div>
             </div>
         </div>
-        <div>
+        <div class="filter">
             <div class="movie-detail"><span>Cast</span></div>
             <div class="scrollable">
                 <div *ngFor="let cast of mediaInfo.credits.cast;">
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="filter">
             <div class="movie-detail"><span>Crew</span></div>
             <div class="scrollable">
                 <div *ngFor="let crew of mediaInfo.credits.crew;">
@@ -50,11 +50,12 @@
         </div>
     </div>
 </div>
-<div *ngIf="mediaInfo && mediaInfo.similar.total_results > 0">
+<div class="filter" *ngIf="mediaInfo && mediaInfo.similar.total_results > 0">
     <div class="movie-detail"><span>Similar Movies</span></div>
     <div class="scrollable">
         <div *ngFor="let movie of mediaInfo.similar.results;">
             <div class="info">
+                <button (click)="openDialog(movie)">+</button>
                 <a routerLink="/movie/{{movie.id}}">
                     <img class="poster" src="{{castImgBaseUrl}}{{movie.poster_path}}" fallback="assets/images/no-image.png" />
                 </a>

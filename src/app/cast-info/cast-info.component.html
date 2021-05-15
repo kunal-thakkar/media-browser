@@ -24,11 +24,12 @@
                 <div class="overview">{{castInfo.biography}}</div>
             </div>
         </div>
-        <div>
+        <div class="filter">
             <div class="detail"><span>Credits (cast)</span></div>
             <div class="scrollable">
                 <div *ngFor="let cast of castInfo.combined_credits.cast;">
                     <div class="info">
+                        <button (click)="openDialog(cast)">+</button>
                         <a routerLink="/movie/{{cast.id}}">
                             <img class="poster" src="{{smallImgBaseUrl}}{{cast.poster_path}}" fallback="assets/images/no-image.png" />
                         </a>
@@ -37,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="castInfo.combined_credits.crew.length > 0">
+        <div class="filter" *ngIf="castInfo.combined_credits.crew.length > 0">
             <div class="detail"><span>Credits (Crew)</span></div>
             <div class="scrollable">
                 <div *ngFor="let crew of castInfo.combined_credits.crew;">

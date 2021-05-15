@@ -6,11 +6,14 @@
 
 .info {
     width: 100%;
+    padding: 5px;
+    vertical-align: top;
 }
 
 .title {
     font-size: xx-large;
     font-weight: bold;
+    margin-bottom: 15px;
 }
 
 .detail {
@@ -25,32 +28,6 @@
 
 .overview {
     overflow: auto;
-}
-
-div.scrollable {
-    width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
-    margin: 5px 0px;
-    display: inline-flex;
-}
-
-div.scrollable .poster {
-    width: 100px;
-    height: 140px;
-    float: left;
-}
-
-div.scrollable .title {
-    font-size: medium;
-    font-weight: normal;
-    white-space: normal;
-    width: 100px;
-}
-
-div.scrollable .info {
-    padding: 0px 2px;
 }
 
 

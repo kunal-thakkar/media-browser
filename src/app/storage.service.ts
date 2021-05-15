@@ -25,6 +25,7 @@ export enum StorageKeys {
 export class StorageService {
 
   filtersSubject: BehaviorSubject<Filters[]> = new BehaviorSubject<Filters[]>([]);
+  movieFilters: Filters[] = [];
   private user: firebase.User;
 
   constructor(private firebaseService: FirebaseService, private fireStorage: AngularFireStorage,
@@ -38,6 +39,7 @@ export class StorageService {
           .subscribe(url => {
             this.http.get(url).subscribe((obj: Filters[]) => {
               this.filtersSubject.next(obj);
+              this.movieFilters = obj || [];
             });
           });
       }

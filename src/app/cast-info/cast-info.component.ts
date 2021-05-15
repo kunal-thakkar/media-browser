@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TmdbService } from '../tmdb.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddToCategoryDialog, Filters } from '../dashboard/dashboard.component';
+import { StorageKeys, StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-cast-info',
@@ -13,14 +16,40 @@ export class CastInfoComponent implements OnInit {
   imgBaseUrl: string;
   smallImgBaseUrl: string;
 
-  constructor(private service: TmdbService, private route: ActivatedRoute) { }
+  constructor(private service: TmdbService, private route: ActivatedRoute,
+    private storage: StorageService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.imgBaseUrl = this.service.getImgBaseUrl(3);
-    this.smallImgBaseUrl = this.service.getImgBaseUrl(0);
-    this.route.params.subscribe(p=>{
-      this.service.getCastInfo(p.id).subscribe(d=>this.castInfo = d);
+    this.smallImgBaseUrl = this.service.getImgBaseUrl(1);
+    this.route.params.subscribe(p => {
+      this.service.getCastInfo(p.id).subscribe(d => this.castInfo = d);
     });
   }
 
+  openDialog(item) {
+    const dialogRef = this.dialog.open(AddToCategoryDialog, {
+      width: '250px',
+      data: {
+        category: ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      let filter: Filters[] = this.storage.movieFilters.filter((f: Filters) => f.title === result);
+      if (filter.length > 0) {
+        if (filter[0].items.filter(i => i.id === item.id).length === 0) {
+          filter[0].items.push(item);
+        }
+      }
+      else {
+        this.storage.movieFilters.push({
+          title: result,
+          isCustom: true,
+          items: [item]
+        });
+      }
+      this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.storage.movieFilters);
+    });
+  }
 }
