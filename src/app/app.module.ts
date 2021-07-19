@@ -7,13 +7,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TmdbService } from './tmdb.service';
-import { AddToCategoryDialog, DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { StorageService } from './storage.service';
 import { SettingsComponent } from './settings/settings.component';
 import { CacheInterceptor } from './shared/cache.interceptor';
 import { MovieInfoComponent } from './movie-info/movie-info.component';
 import { TmdbConfigProvider } from './tmdb.config.provider';
-import { ImgFallBackDirective } from './common/ImgFallbackDirective';
+import { ImgFallBackDirective } from './shared/ImgFallbackDirective';
 import { CastInfoComponent } from './cast-info/cast-info.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
@@ -32,13 +32,15 @@ import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { FirebaseService } from './firebase.service';
+import { ScrollviewComponent } from './shared/scrollview/scrollview.component';
+import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
   return () => provider.load();
 }
 
-export function FirebaseAuthProviderFactory(service: FirebaseService ) {
+export function FirebaseAuthProviderFactory(service: FirebaseService) {
   return () => service._auth();
 }
 
@@ -50,7 +52,8 @@ export function FirebaseAuthProviderFactory(service: FirebaseService ) {
     MovieInfoComponent,
     ImgFallBackDirective,
     CastInfoComponent,
-    AddToCategoryDialog
+    ScrollviewComponent,
+    CategoryDialogComponent
   ],
   imports: [
     BrowserModule,

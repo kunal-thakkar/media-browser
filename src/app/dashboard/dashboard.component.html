@@ -1,43 +1,12 @@
 <form class="search" (submit)="search()">
-    <img src="assets/images/searchicon.png">
-    <input type="text" [(ngModel)]="searchText" name="searchText" placeholder="Search ..">
+  <img src="assets/images/searchicon.png">
+  <input type="text" [(ngModel)]="searchText" name="searchText" placeholder="Search ..">
 </form>
 <div class="filter" *ngIf="searchResults.length > 0">
-    <div *ngFor="let search of searchResults; index as i;">
-        <div *ngIf="search.items.length > 0" class="label">{{search.title}}
-            <button (click)="removeSearch(i)">X</button>
-        </div>
-        <div *ngIf="search.items.length > 0" class="scrollable">
-            <div *ngFor="let item of search.items; index as ii">
-                <div>
-                    <div class="info">
-                        <button (click)="openDialog(search.items, ii)">+</button>
-                        <a routerLink="/movie/{{item.id}}">
-                            <img class="poster" src="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
-                        </a>
-                        <div class="title">{{item.title}} {{item.release_date | date:'LLL yyyy'}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div *ngFor="let search of searchResults; index as i;">
+    <app-scrollview (removeEvent)="removeSearchHandler" [filter]="search"></app-scrollview>
+  </div>
 </div>
 <div class="filter" *ngFor="let category of categories; index as i;">
-    <div class="label">{{category.title}}
-        <button (click)="removeCat(i)">X</button>
-    </div>
-    <div class="scrollable">
-        <div *ngFor="let item of category.items; index as ii">
-            <div>
-                <div class="info">
-                    <button (click)="openDialog(category.items, ii)">+</button>
-                    <a routerLink="/movie/{{item.id}}">
-                        <img class="poster" src="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
-                    </a>
-                    <div class="title">{{item.title}} {{item.release_date | date:'LLL yyyy'}}</div>
-                </div>
-            </div>
-        </div>
-        <button *ngIf="category.index < (category.totalPages - 1) && !category.isLoading" (click)="loadMore(i)" class="more">></button>
-    </div>
+  <app-scrollview (removeEvent)="removeCatHandler" [filter]="category"></app-scrollview>
 </div>

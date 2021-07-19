@@ -4,8 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../firebase.service';
 import { take } from 'rxjs/operators';
 import { StorageKeys, StorageService } from '../storage.service';
-import { AddToCategoryDialog, Filters } from '../dashboard/dashboard.component';
+import { Filters } from '../dashboard/dashboard.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
 
 @Component({
   selector: 'app-movie-info',
@@ -48,7 +49,7 @@ export class MovieInfoComponent implements OnInit {
   }
 
   openDialog(item) {
-    const dialogRef = this.dialog.open(AddToCategoryDialog, {
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '250px',
       data: {
         category: ''

@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { TmdbService } from '../tmdb.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { AddToCategoryDialog, Filters } from '../dashboard/dashboard.component';
+import { Filters } from '../dashboard/dashboard.component';
 import { StorageKeys, StorageService } from '../storage.service';
+import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
 
 @Component({
   selector: 'app-cast-info',
@@ -28,7 +29,7 @@ export class CastInfoComponent implements OnInit {
   }
 
   openDialog(item) {
-    const dialogRef = this.dialog.open(AddToCategoryDialog, {
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '250px',
       data: {
         category: ''

@@ -1,0 +1,17 @@
+<div *ngIf="filter.items.length > 0" class="label">{{filter.title}}
+  <button (click)="remove()">X</button>
+</div>
+<div class="scrollable">
+  <div *ngFor="let item of filter.items; index as ii">
+    <div>
+      <div class="info">
+        <button (click)="addItemTo(item)">+</button>
+        <a routerLink="/movie/{{item.id}}">
+          <img class="poster" src="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
+        </a>
+        <div class="title">{{item.title}} {{item.release_date | date:'LLL yyyy'}}</div>
+      </div>
+    </div>
+  </div>
+  <button *ngIf="filter.index < (filter.totalPages - 1) && !isLoading" (click)="loadMore()" class="more">></button>
+</div>

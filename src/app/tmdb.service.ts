@@ -3,6 +3,7 @@ import { Observable, throwError, forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DiscoverOption } from './discover.option';
 import { StorageService, StorageKeys } from './storage.service';
+import { Filters } from './dashboard/dashboard.component';
 
 export enum Category {
   Movie = "movie", TvShows = "tv"
@@ -98,4 +99,13 @@ export class TmdbService {
     });
   }
 
+  loadItems(cat: Category, e: Filters): Observable<any> {
+    e.discoverOption.page = e.discoverOption.page || 1
+    if (!e.discoverOption || e.index === e.discoverOption.page) return;
+    this.discover(cat, e.discoverOption).subscribe(data => {
+      e.items.push(...data.results.filter(item => !this.storage.customFilterMediaIds.includes(item.id)));
+      e.index = e.discoverOption.page;
+      e.totalPages = data.total_pages;
+    });
+  }
 }
