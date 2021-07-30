@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Filters } from '../dashboard/dashboard.component';
+import { MediaList } from '../shared/model';
 import { StorageService } from '../storage.service';
 
 export interface DialogData {
@@ -27,7 +27,7 @@ export class CategoryDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit() {
-    this.options = this.storage.movieFilters.filter((f: Filters) => f.isCustom).map((f: Filters) => f.title);
+    this.options = this.storage.movieFilters.filter((f: MediaList) => f.isCustom).map((f: MediaList) => f.title);
 
     this.filteredOptions = this.categoryInput.valueChanges.pipe(
       map(value => this.data.category = value),

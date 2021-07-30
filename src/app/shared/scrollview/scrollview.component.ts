@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { take } from 'rxjs/operators';
 import { CategoryDialogComponent } from 'src/app/category-dialog/category-dialog.component';
-import { Filters } from 'src/app/dashboard/dashboard.component';
+import { DiscoverOption } from 'src/app/discover.option';
 import { StorageService } from 'src/app/storage.service';
 import { Category, TmdbService } from 'src/app/tmdb.service';
 
@@ -15,27 +16,54 @@ export interface ScrollItem {
   templateUrl: './scrollview.component.html',
   styleUrls: ['./scrollview.component.css']
 })
-export class ScrollviewComponent implements OnInit {
-  @Input() filter: Filters;
-  @Output() removeEvent = new EventEmitter<Filters>();
+export class ScrollviewComponent implements OnInit, AfterViewInit {
+  @Input() title: string;
+  @Input() opt: DiscoverOption;
+  @Input() items: any[] = [];
+  @Input() cat: Category;
+  @Output() removeEvent = new EventEmitter<DiscoverOption>();
+  @ViewChild('loadMore', { static: false }) loadMore: ElementRef;
 
-  isLoading: boolean;
+  isLoading: boolean = false;
   imgBaseUrl: string;
+  index: number = 1;
+  totalPages: number = 1;
+  obsever: IntersectionObserver;
 
   constructor(private tmdbService: TmdbService, private storage: StorageService, private dialog: MatDialog) {
     this.imgBaseUrl = tmdbService.getImgBaseUrl();
   }
 
   ngOnInit(): void {
-    if (this.filter.discoverOption) this.tmdbService.loadItems(Category.Movie, this.filter);
+    if (this.opt) {
+      this.opt.page = this.opt.page || 1;
+      this.loadItems();
+      this.obsever = new IntersectionObserver((entries, observer) => {
+        if (entries.length > 0 && entries[0].isIntersecting) {
+          this.loadMoreItems();
+        }
+      });
+    }
   }
 
-  loadMore() {
-    if (this.isLoading) return;
-    this.filter.discoverOption.page++;
+  ngAfterViewInit() {
+    this.obsever.observe(this.loadMore.nativeElement);
+  }
+
+  loadItems() {
     this.isLoading = true;
-    this.tmdbService.loadItems(Category.Movie, this.filter);
-    setTimeout(() => { this.isLoading = false }, 500);
+    this.tmdbService.discover(this.cat, this.opt).pipe(take(1)).subscribe(data => {
+      this.items.push(...data.results);
+      this.index = this.opt.page;
+      this.totalPages = data.total_pages;
+      this.isLoading = false;
+    });
+  }
+
+  loadMoreItems() {
+    if (this.isLoading || this.index >= (this.totalPages - 1)) return;
+    this.opt.page++;
+    this.loadItems();
   }
 
   addItemTo(item: any) {
@@ -49,6 +77,6 @@ export class ScrollviewComponent implements OnInit {
   }
 
   remove() {
-    if (this.removeEvent) this.removeEvent.emit(this.filter);
+    if (this.removeEvent) this.removeEvent.emit(this.opt);
   }
 }

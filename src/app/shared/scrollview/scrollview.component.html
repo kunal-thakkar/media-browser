@@ -1,8 +1,8 @@
-<div *ngIf="filter.items.length > 0" class="label">{{filter.title}}
-  <button (click)="remove()">X</button>
+<div *ngIf="items.length > 0" class="label">{{title}}
+  <button *ngIf="removeEvent.observers.length" (click)="remove()">X</button>
 </div>
 <div class="scrollable">
-  <div *ngFor="let item of filter.items; index as ii">
+  <div *ngFor="let item of items; index as ii">
     <div>
       <div class="info">
         <button (click)="addItemTo(item)">+</button>
@@ -13,5 +13,5 @@
       </div>
     </div>
   </div>
-  <button *ngIf="filter.index < (filter.totalPages - 1) && !isLoading" (click)="loadMore()" class="more">></button>
+  <div #loadMore></div>
 </div>

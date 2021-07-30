@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../firebase.service';
 import { take } from 'rxjs/operators';
 import { StorageKeys, StorageService } from '../storage.service';
-import { Filters } from '../dashboard/dashboard.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
+import { MediaList } from '../shared/model';
 
 @Component({
   selector: 'app-movie-info',
@@ -57,7 +57,7 @@ export class MovieInfoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      let filter: Filters[] = this.storage.movieFilters.filter((f: Filters) => f.title === result);
+      let filter: MediaList[] = this.storage.movieFilters.filter((f: MediaList) => f.title === result);
       if (filter.length > 0) {
         if (filter[0].items.filter(i => i.id === item.id).length === 0) {
           filter[0].items.push(item);

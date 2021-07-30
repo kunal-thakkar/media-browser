@@ -14,7 +14,8 @@ export class AppComponent {
 
   navList = [
     { "icon": "home", "text": "Home", "routerLink": "/" },
-    { "icon": "settings", "text": "Settings", "routerLink": "/settings"}
+    { "icon": "list", "text": "Watchlist", "routerLink": "/watchlist" },
+    { "icon": "settings", "text": "Settings", "routerLink": "/settings" }
   ];
 
   constructor(private firebaseService: FirebaseService) { }
@@ -24,7 +25,7 @@ export class AppComponent {
       this.user = user;
     });
   }
-  
+
   login() {
     this.firebaseService.login();
   }

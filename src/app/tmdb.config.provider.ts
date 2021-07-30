@@ -23,11 +23,7 @@ export class TmdbConfigProvider {
       ]).subscribe(data => {
         this.service.setConfiguration(data[0]);
         this.storage.writeJson(StorageKeys.Configuration, data[0]);
-        let genres = {};
-        data[1]["genres"].forEach(e => {
-          genres[e.id] = e.name;
-        });
-        this.storage.writeJson(StorageKeys.MovieGenreKey, genres);
+        this.storage.writeJson(StorageKeys.MovieGenreKey, data[1]);
         let certifications = {};
         for (let k in data[2]["certifications"]) {
           let certs = {};

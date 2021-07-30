@@ -3,7 +3,7 @@ import { Observable, throwError, forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DiscoverOption } from './discover.option';
 import { StorageService, StorageKeys } from './storage.service';
-import { Filters } from './dashboard/dashboard.component';
+import { DiscoverResponse } from './shared/model';
 
 export enum Category {
   Movie = "movie", TvShows = "tv"
@@ -49,12 +49,12 @@ export class TmdbService {
     this.configuration = configuration;
   }
 
-  discover(c: Category, o: DiscoverOption): Observable<any> {
+  discover(c: Category, o: DiscoverOption): Observable<DiscoverResponse> {
     let query = ["api_key=" + this.apiKey];
     for (let k in o) {
       if (o.hasOwnProperty(k) && o[k]) this.addQueryCriteria(query, k, o[k]);
     }
-    return this.http.get(`${this.tmdbBaseUrl}/discover/${c}?` + query.join("&"));
+    return this.http.get<DiscoverResponse>(`${this.tmdbBaseUrl}/discover/${c}?` + query.join("&"));
   }
 
   getGenreList(c: Category) {
@@ -99,13 +99,9 @@ export class TmdbService {
     });
   }
 
-  loadItems(cat: Category, e: Filters): Observable<any> {
-    e.discoverOption.page = e.discoverOption.page || 1
-    if (!e.discoverOption || e.index === e.discoverOption.page) return;
-    this.discover(cat, e.discoverOption).subscribe(data => {
-      e.items.push(...data.results.filter(item => !this.storage.customFilterMediaIds.includes(item.id)));
-      e.index = e.discoverOption.page;
-      e.totalPages = data.total_pages;
-    });
+  getItems(cat: Category, opt: DiscoverOption): Observable<any> {
+    opt.page = opt.page || 1;
+    return this.discover(cat, opt);
   }
+
 }

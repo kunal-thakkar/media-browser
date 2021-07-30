@@ -3,7 +3,7 @@ import { StorageService, StorageKeys } from '../storage.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { TmdbService } from '../tmdb.service';
-import { Filters } from '../dashboard/dashboard.component';
+import { MediaList } from '../shared/model';
 
 @Component({
   selector: 'app-settings',
@@ -33,7 +33,7 @@ export class SettingsComponent implements OnInit {
     "vote_count.desc": "Vote Count Desc"
   };
   certifications = this.storage.readJSON(StorageKeys.MovieCertificationsKey);
-  genres = this.storage.readJSON(StorageKeys.MovieGenreKey);
+  genres;
   langOpt = this.storage.readJSON(StorageKeys.Languages);
 
   fg: FormGroup = this.fb.group({
@@ -58,7 +58,7 @@ export class SettingsComponent implements OnInit {
     { "key": "sort_by", "label": "Sort By", "type": "choice", "set": this.sortBy },
   ];
 
-  discoverMovieFilters: Filters[];
+  discoverMovieFilters: MediaList[];
 
   removeFilter(idx) {
     this.discoverMovieFilters.splice(idx, 1);
@@ -84,7 +84,11 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.storage.filtersSubject.subscribe((filters: Filters[]) => {
+    this.genres = {};
+    this.storage.readJSON(StorageKeys.MovieGenreKey).forEach(e => {
+      this.genres[e.id] = e.name;
+    });
+    this.storage.filtersSubject.subscribe((filters: MediaList[]) => {
       this.discoverMovieFilters = filters || [];
     });
   }

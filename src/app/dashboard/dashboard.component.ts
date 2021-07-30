@@ -1,44 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TmdbService, Category } from './../tmdb.service';
 import { StorageService, StorageKeys } from '../storage.service';
-import { DiscoverOption } from '../discover.option';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
-
-export interface Filters {
-  index?: number;
-  title: string;
-  totalPages?: number;
-  items?: any[];
-  discoverOption?: DiscoverOption;
-  isCustom?: boolean;
-  showOnDashboard?: boolean;
-}
+import { MediaList, Genre } from '../shared/model';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
-  private day = 1000 * 60 * 60 * 24;
-  private week = this.day * 7;
-  private year = this.week * 52;
-  private today = new Date();
+  @ViewChild('loadMore', { static: false }) loadMore: ElementRef;
 
   searchText: string;
-  categories: Filters[] = [];
   searchResults: any[] = [];
+  filters: MediaList[] = [];
+  filterStart: number = 0;
+  filterStep = 5;
+  isLoading: boolean = false;
+  observer: IntersectionObserver;
 
-  constructor(private tmdbService: TmdbService, private storage: StorageService,
+  constructor(private tmdbService: TmdbService, public storage: StorageService,
     private analytics: AngularFireAnalytics) { }
 
   ngOnInit() {
     this.analytics.logEvent('Dashboard loaded');
-    this.searchResults = this.storage.readJSON(StorageKeys.SearchHistory) || [];
-    this.storage.filtersSubject.subscribe((movieFilters: Filters[]) => {
-      this.categories = movieFilters;
+    this.observer = new IntersectionObserver((entries, observer) => {
+      if (entries.length > 0 && entries[0].isIntersecting) {
+        this.loadFilters();
+      }
     });
+    this.searchResults = this.storage.readJSON(StorageKeys.SearchHistory) || [];
+    this.loadFilters();
+  }
+
+  ngAfterViewInit() {
+    this.observer.observe(this.loadMore.nativeElement);
+  }
+
+  loadFilters() {
+    if (this.storage.genres.length <= this.filterStart) return;
+    this.storage.genres.slice(this.filterStart, Math.min(this.storage.genres.length, this.filterStart + this.filterStep))
+      .forEach((g: Genre) => {
+        this.filters.push({
+          title: g.name,
+          category: Category.Movie,
+          discoverOption: {
+            with_genres: g.id
+          }
+        });
+      });
+    this.filterStart += this.filterStep;
   }
 
   search() {
@@ -56,22 +69,7 @@ export class DashboardComponent implements OnInit {
     this.storage.writeJson(StorageKeys.SearchHistory, this.searchResults);
   }
 
-  removeCat(i: number) {
-    this.categories.splice(i, 1);
-    this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.categories);
-  }
-
-  formatDate(d: Date): String {
-    let format = (v) => v < 10 ? "0" + v : v;
-    return d.getFullYear() + "-" + format(d.getMonth() + 1) + "-" + format(d.getDate());
-  }
-
-  removeCatHandler(filter: Filters) {
-    this.removeCat(this.categories.indexOf(filter));
-  }
-
-  removeSearchHandler(filter: Filters) {
+  removeSearchHandler(filter: MediaList) {
     this.removeSearch(this.searchResults.indexOf(filter));
   }
-
 }

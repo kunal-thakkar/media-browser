@@ -6,5 +6,5 @@ export class DiscoverOption {
     certification_country?: String;
     primary_release_date?: String;
     primary_release_year?: String;
-    genres?: String;
+    with_genres?: String;
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Filters } from './dashboard/dashboard.component';
 import { AngularFireStorage } from '@angular/fire/storage';
 import firebase from "node_modules/firebase";
 import { HttpClient } from '@angular/common/http';
 import { take } from 'rxjs/operators';
 import { FirebaseService } from './firebase.service';
+import { MediaList, Genre } from './shared/model';
 
 export enum StorageKeys {
   PreferenceKey = 'preferences',
@@ -23,9 +23,10 @@ export enum StorageKeys {
 })
 export class StorageService {
 
-  filtersSubject: BehaviorSubject<Filters[]> = new BehaviorSubject<Filters[]>([]);
-  movieFilters: Filters[] = [];
+  filtersSubject: BehaviorSubject<MediaList[]> = new BehaviorSubject<MediaList[]>([]);
+  movieFilters: MediaList[] = [];
   customFilterMediaIds: number[] = [];
+  genres: Genre[];
   private user: firebase.User;
 
   constructor(private firebaseService: FirebaseService, private fireStorage: AngularFireStorage,
@@ -37,7 +38,7 @@ export class StorageService {
           .getDownloadURL()
           .pipe(take(1))
           .subscribe(url => {
-            this.http.get(url).subscribe((obj: Filters[]) => {
+            this.http.get(url).subscribe((obj: MediaList[]) => {
               this.filtersSubject.next(obj);
               this.movieFilters = obj || [];
               this.customFilterMediaIds = [];
@@ -68,8 +69,8 @@ export class StorageService {
 
   public writeJson(key: string, val: any) {
     if (key == StorageKeys.DiscoverMovieFilters) {
-      let _val: Filters[] = val.map(i => {
-        let _i: Filters = Object.assign({}, i);
+      let _val: MediaList[] = val.map(i => {
+        let _i: MediaList = Object.assign({}, i);
         ["index", "totalPages"].forEach(k => delete _i[k])
         return _i;
       });
@@ -85,6 +86,9 @@ export class StorageService {
       this.filtersSubject.next(val);
     }
     else {
+      if (key == StorageKeys.MovieGenreKey) {
+        this.genres = val["genres"] || [];
+      }
       this.write(key, JSON.stringify(val));
     }
   }
@@ -102,7 +106,7 @@ export class StorageService {
   }
 
   moveMovieItem(title: string, item: any) {
-    let filter: Filters[] = this.movieFilters.filter((f: Filters) => f.title === title);
+    let filter: MediaList[] = this.movieFilters.filter((f: MediaList) => f.title === title);
     if (filter.length > 0) {
       if (filter[0].items.filter(i => i.id === item.id).length === 0) {
         filter[0].items.push(item);

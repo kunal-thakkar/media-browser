@@ -34,6 +34,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { FirebaseService } from './firebase.service';
 import { ScrollviewComponent } from './shared/scrollview/scrollview.component';
 import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
+import { WatchlistComponent } from './watchlist/watchlist.component';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
@@ -53,7 +54,8 @@ export function FirebaseAuthProviderFactory(service: FirebaseService) {
     ImgFallBackDirective,
     CastInfoComponent,
     ScrollviewComponent,
-    CategoryDialogComponent
+    CategoryDialogComponent,
+    WatchlistComponent
   ],
   imports: [
     BrowserModule,
