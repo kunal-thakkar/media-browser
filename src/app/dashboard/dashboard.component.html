@@ -10,4 +10,4 @@
 <div class="filter" *ngFor="let filter of filters">
   <app-scrollview [title]="filter.title" [opt]="filter.discoverOption" [cat]="filter.category"></app-scrollview>
 </div>
-<div #loadMore></div>
+<div #loadMore><span *ngIf="storage.genres.length > filterStart">loading....</span></div>

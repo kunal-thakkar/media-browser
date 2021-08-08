@@ -13,9 +13,9 @@ export class CacheInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // pass along non-cacheable requests and invalidate cache
-    if(req.method !== 'GET') {
-    //   console.log(`Invalidating cache: ${req.method} ${req.url}`);
-    //   this.cacheService.invalidateCache();
+    if (req.method !== 'GET') {
+      //   console.log(`Invalidating cache: ${req.method} ${req.url}`);
+      //   this.cacheService.invalidateCache();
       return next.handle(req);
     }
 
@@ -34,7 +34,6 @@ export class CacheInterceptor implements HttpInterceptor {
       .pipe(
         tap(event => {
           if (event instanceof HttpResponse) {
-            console.log(`Adding item to cache: ${req.urlWithParams}`);
             this.cacheService.put(req.url, event);
           }
         })
