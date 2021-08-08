@@ -14,20 +14,14 @@ export class FirebaseService {
   authSubscription: Subscription;
   user: BehaviorSubject<firebase.User> = new BehaviorSubject<firebase.User>(null);
 
-  constructor(private auth: AngularFireAuth, private http: HttpClient) {
-    if(this.auth.user) {
-      this.authSubscription = this.auth.user.subscribe(user => {
-        this.user.next(user);
-      });
-    }
-  }
+  constructor(private auth: AngularFireAuth, private http: HttpClient) { }
 
   //Will be called before application starts
   _auth() {
     return new Promise((resolve, reject) => {
-      if(this.auth.user) {
-        this.auth.user.pipe(take(1)).subscribe(user => {
-          this.user.next(user); 
+      if (this.auth.user) {
+        this.auth.user.subscribe(user => {
+          this.user.next(user);
           resolve(true);
         });
       }
@@ -36,16 +30,13 @@ export class FirebaseService {
       }
     });
   }
-  
+
   login() {
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-    .then((userCredential: firebase.auth.UserCredential)=>{
-      this.user.next(userCredential.user);
-    });
+    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
   logout() {
-    if(this.authSubscription) this.authSubscription.unsubscribe();
+    if (this.authSubscription) this.authSubscription.unsubscribe();
     this.user.next(null);
     this.auth.signOut();
   }

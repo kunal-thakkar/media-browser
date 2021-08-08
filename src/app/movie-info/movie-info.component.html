@@ -1,78 +1,40 @@
 <div class="container" *ngIf="mediaInfo">
-    <div class="movie-poster">
-        <img src="{{imgBaseUrl}}{{mediaInfo.poster_path}}" />
+  <div class="movie-poster">
+    <img src="{{imgBaseUrl}}{{mediaInfo.poster_path}}" />
+  </div>
+  <div class="movie-info">
+    <div>
+      <div class="movie-title">
+        <span>{{mediaInfo.title}}</span>
+      </div>
+      <div class="movie-detail">
+        <span>Release Date:</span>{{mediaInfo.release_date | date:'dd MMM yyyy'}}
+      </div>
+      <div class="movie-detail">
+        <span>Languages:</span>{{spoken_languages}}
+      </div>
+      <div class="movie-detail">
+        <span>Genres:</span>{{genres}}
+      </div>
+      <div class="movie-detail">
+        <span>Overview:</span>
+        <div class="movie-overview">{{mediaInfo.overview}}</div>
+      </div>
     </div>
-    <div class="movie-info">
-        <div>
-            <div class="movie-title">
-                <span>{{mediaInfo.title}}</span>
-            </div>
-            <div class="movie-detail">
-                <span>Release Date:</span>{{mediaInfo.release_date | date:'dd MMM yyyy'}}
-            </div>
-            <div class="movie-detail">
-                <span>Languages:</span>{{spoken_languages}}
-            </div>
-            <div class="movie-detail">
-                <span>Genres:</span>{{genres}}
-            </div>
-            <div class="movie-detail">
-                <span>Overview:</span>
-                <div class="movie-overview">{{mediaInfo.overview}}</div>
-            </div>
-        </div>
-        <div class="filter">
-            <div class="movie-detail"><span>Cast</span></div>
-            <div class="scrollable">
-                <div *ngFor="let cast of mediaInfo.credits.cast;">
-                    <div class="info">
-                        <a routerLink="/cast/{{cast.id}}">
-                            <img class="poster" src="{{castImgBaseUrl}}{{cast.profile_path}}" fallback="assets/images/no-image.png" />
-                        </a>
-                        <div class="title">{{cast.name}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="filter">
-            <div class="movie-detail"><span>Crew</span></div>
-            <div class="scrollable">
-                <div *ngFor="let crew of mediaInfo.credits.crew;">
-                    <div class="info">
-                        <a routerLink="/cast/{{crew.id}}">
-                            <img class="poster" src="{{castImgBaseUrl}}{{crew.profile_path}}" fallback="assets/images/no-image.png" />
-                        </a>
-                        <div class="title">{{crew.department}}</div>
-                        <div class="title">{{crew.name}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <app-scrollview cat="cast" [items]="cast" title="Cast"></app-scrollview>
+    <app-scrollview cat="cast" [items]="crew" title="Crew"></app-scrollview>
+  </div>
 </div>
-<div class="filter" *ngIf="mediaInfo && mediaInfo.similar.total_results > 0">
-    <div class="movie-detail"><span>Similar Movies</span></div>
-    <div class="scrollable">
-        <div *ngFor="let movie of mediaInfo.similar.results;">
-            <div class="info">
-                <button (click)="openDialog(movie)">+</button>
-                <a routerLink="/movie/{{movie.id}}">
-                    <img class="poster" src="{{castImgBaseUrl}}{{movie.poster_path}}" fallback="assets/images/no-image.png" />
-                </a>
-                <div class="title">{{movie.title}} {{movie.release_date | date:'yyyy'}}</div>
-            </div>
-        </div>
-    </div>
-</div>
+<app-scrollview *ngIf="mediaInfo && mediaInfo.similar.total_results > 0" cat="movie" [items]="simillerMovies" title="Similar Movies"></app-scrollview>
 <div *ngIf="googleSearchResult && googleSearchResult.items">
-    <div class="movie-detail"><span>Watch Online Search Powered by Google</span></div>
-    <div class="google-search-result">
-        <div *ngFor="let item of googleSearchResult.items;" class="google-search-item">
-            <div class="google-search-details">
-                <div class="title" [innerHtml]="item.htmlTitle"></div>
-                <div class="description" [innerHtml]="item.htmlSnippet"></div>
-                <div class="link"><a href="{{item.link}}" target="_blank">{{item.displayLink}}</a></div>
-            </div>
-        </div>
+  <div class="movie-detail"><span>Watch Online Search Powered by Google</span></div>
+  <div class="google-search-result">
+    <div *ngFor="let item of googleSearchResult.items;" class="google-search-item">
+      <div class="google-search-details">
+        <div class="title" [innerHtml]="item.htmlTitle"></div>
+        <div class="description" [innerHtml]="item.htmlSnippet"></div>
+        <div class="link"><a href="{{item.link}}" target="_blank">{{item.displayLink}}</a></div>
+      </div>
     </div>
+  </div>
 </div>

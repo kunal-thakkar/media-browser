@@ -4,7 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, AuthGaurdService } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TmdbService } from './tmdb.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -35,6 +35,7 @@ import { FirebaseService } from './firebase.service';
 import { ScrollviewComponent } from './shared/scrollview/scrollview.component';
 import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
 import { WatchlistComponent } from './watchlist/watchlist.component';
+import { MediaCollectionComponent } from './media-collection/media-collection.component';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
@@ -55,7 +56,8 @@ export function FirebaseAuthProviderFactory(service: FirebaseService) {
     CastInfoComponent,
     ScrollviewComponent,
     CategoryDialogComponent,
-    WatchlistComponent
+    WatchlistComponent,
+    MediaCollectionComponent
   ],
   imports: [
     BrowserModule,
@@ -79,7 +81,7 @@ export function FirebaseAuthProviderFactory(service: FirebaseService) {
     MatFormFieldModule,
     FlexLayoutModule
   ],
-  providers: [StorageService, TmdbService, TmdbConfigProvider, FirebaseService, ScreenTrackingService,
+  providers: [StorageService, TmdbService, TmdbConfigProvider, FirebaseService, ScreenTrackingService, AuthGaurdService,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
     { provide: APP_INITIALIZER, useFactory: TmdbConfigProviderFactory, deps: [TmdbConfigProvider], multi: true },
     { provide: APP_INITIALIZER, useFactory: FirebaseAuthProviderFactory, deps: [FirebaseService], multi: true }

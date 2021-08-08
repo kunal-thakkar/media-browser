@@ -1,55 +1,30 @@
 <div class="container" *ngIf="castInfo">
-    <div class="poster">
-        <img src="{{imgBaseUrl}}{{castInfo.profile_path}}" />
+  <div class="poster">
+    <img src="{{imgBaseUrl}}{{castInfo.profile_path}}" />
+  </div>
+  <div class="info">
+    <div>
+      <div class="title">
+        <span>{{castInfo.name}}</span>
+      </div>
+      <div class="detail">
+        <span>Birth Date:</span>{{castInfo.birthday | date:'dd MMM yyyy'}}
+      </div>
+      <div class="detail">
+        <span>Also known as:</span>{{castInfo.also_known_as.join(", ")}}
+      </div>
+      <div class="detail">
+        <span>Known for department:</span>{{castInfo.known_for_department}}
+      </div>
+      <div class="detail">
+        <span>Place of birth</span>{{castInfo.place_of_birth}}
+      </div>
+      <div class="detail">
+        <span>Biography:</span>
+        <div class="overview">{{castInfo.biography}}</div>
+      </div>
     </div>
-    <div class="info">
-        <div>
-            <div class="title">
-                <span>{{castInfo.name}}</span>
-            </div>
-            <div class="detail">
-                <span>Birth Date:</span>{{castInfo.birthday | date:'dd MMM yyyy'}}
-            </div>
-            <div class="detail">
-                <span>Also known as:</span>{{castInfo.also_known_as.join(", ")}}
-            </div>
-            <div class="detail">
-                <span>Known for department:</span>{{castInfo.known_for_department}}
-            </div>
-            <div class="detail">
-                <span>Place of birth</span>{{castInfo.place_of_birth}}
-            </div>
-            <div class="detail">
-                <span>Biography:</span>
-                <div class="overview">{{castInfo.biography}}</div>
-            </div>
-        </div>
-        <div class="filter">
-            <div class="detail"><span>Credits (cast)</span></div>
-            <div class="scrollable">
-                <div *ngFor="let cast of castInfo.combined_credits.cast;">
-                    <div class="info">
-                        <button (click)="openDialog(cast)">+</button>
-                        <a routerLink="/movie/{{cast.id}}">
-                            <img class="poster" src="{{smallImgBaseUrl}}{{cast.poster_path}}" fallback="assets/images/no-image.png" />
-                        </a>
-                        <div class="title">{{cast.title}} {{cast.release_date | date:'yyyy'}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="filter" *ngIf="castInfo.combined_credits.crew.length > 0">
-            <div class="detail"><span>Credits (Crew)</span></div>
-            <div class="scrollable">
-                <div *ngFor="let crew of castInfo.combined_credits.crew;">
-                    <div class="info">
-                        <a routerLink="/movie/{{crew.id}}">
-                            <img class="poster" src="{{smallImgBaseUrl}}{{crew.poster_path}}" fallback="assets/images/no-image.png" />
-                        </a>
-                        <div class="title">{{crew.title}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <app-scrollview cat="movie" [items]="castInfo.combined_credits.cast" title="Credits (cast)"></app-scrollview>
+    <app-scrollview cat="movie" [items]="castInfo.combined_credits.crew" title="Credits (crew)"></app-scrollview>
+  </div>
 </div>

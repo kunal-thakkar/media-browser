@@ -1,0 +1,51 @@
+.label {
+  font-size: x-large;
+  margin: 15px 0px 0px 5px;
+  font-weight: bolder;
+}
+
+.label button {
+  float: right;
+}
+
+.scrollable {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  display: inline-flex;
+}
+
+.scrollable .info {
+  padding: 5px;
+  vertical-align: top;
+  width: 100%;
+  margin: unset;
+}
+
+.scrollable .info .poster {
+  width: 150px;
+  height: 220px;
+  float: left;
+}
+
+.scrollable .info .title {
+  white-space: normal;
+  width: 150px;
+  font-size: medium;
+  font-weight: normal;
+}
+
+.scrollable .info button {
+  margin-left: -24px;
+}
+
+.scrollable .more {
+  height: 40px;
+  margin: 100px 0px;
+  border-radius: 40px;
+  width: 40px;
+  background: gray;
+  color: white;
+  border: 1px solid gray;
+}

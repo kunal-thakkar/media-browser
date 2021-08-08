@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators';
 import { StorageKeys, StorageService } from '../storage.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
-import { MediaList } from '../shared/model';
+import { MediaList, ScrollableItem } from '../shared/model';
 
 @Component({
   selector: 'app-movie-info',
@@ -21,6 +21,9 @@ export class MovieInfoComponent implements OnInit {
   castImgBaseUrl: string;
   spoken_languages: string;
   googleSearchResult: any;
+  cast: ScrollableItem[] = [];
+  crew: ScrollableItem[] = [];
+  simillerMovies: ScrollableItem[] = [];
 
   constructor(private service: TmdbService, private router: ActivatedRoute,
     private storage: StorageService, private firebaseService: FirebaseService,
@@ -33,6 +36,21 @@ export class MovieInfoComponent implements OnInit {
       if (param.id) {
         this.service.getInfo(Category.Movie, param.id).subscribe(d => {
           this.mediaInfo = d;
+          console.log(this.mediaInfo)
+          this.cast = this.mediaInfo.credits.cast.map(e => ({
+            ...e,
+            title: e.name,
+            poster_path: e.profile_path
+          }));
+          this.crew = this.mediaInfo.credits.crew.map(e => ({
+            ...e,
+            title: e.job,
+            info: e.department,
+            poster_path: e.profile_path
+          }));
+          this.simillerMovies = this.mediaInfo.similar.results.map(e => ({
+            ...e
+          }));
           let _genres = [];
           d.genres.forEach(e => _genres.push(e.name));
           this.genres = _genres.join(", ");

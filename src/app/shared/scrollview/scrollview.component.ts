@@ -5,6 +5,7 @@ import { CategoryDialogComponent } from 'src/app/category-dialog/category-dialog
 import { DiscoverOption } from 'src/app/discover.option';
 import { StorageService } from 'src/app/storage.service';
 import { Category, TmdbService } from 'src/app/tmdb.service';
+import { DiscoverResponse, ScrollableItem } from '../model';
 
 export interface ScrollItem {
   id: number;
@@ -19,7 +20,7 @@ export interface ScrollItem {
 export class ScrollviewComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Input() opt: DiscoverOption;
-  @Input() items: any[] = [];
+  @Input() items: ScrollableItem[] = [];
   @Input() cat: Category;
   @Output() removeEvent = new EventEmitter<DiscoverOption>();
   @ViewChild('loadMore', { static: false }) loadMore: ElementRef;
@@ -28,7 +29,11 @@ export class ScrollviewComponent implements OnInit, AfterViewInit {
   imgBaseUrl: string;
   index: number = 1;
   totalPages: number = 1;
-  obsever: IntersectionObserver;
+  obsever: IntersectionObserver = new IntersectionObserver((entries, observer) => {
+    if (entries.length > 0 && entries[0].isIntersecting) {
+      this.loadMoreItems();
+    }
+  });
 
   constructor(private tmdbService: TmdbService, private storage: StorageService, private dialog: MatDialog) {
     this.imgBaseUrl = tmdbService.getImgBaseUrl();
@@ -38,11 +43,6 @@ export class ScrollviewComponent implements OnInit, AfterViewInit {
     if (this.opt) {
       this.opt.page = this.opt.page || 1;
       this.loadItems();
-      this.obsever = new IntersectionObserver((entries, observer) => {
-        if (entries.length > 0 && entries[0].isIntersecting) {
-          this.loadMoreItems();
-        }
-      });
     }
   }
 
@@ -52,7 +52,7 @@ export class ScrollviewComponent implements OnInit, AfterViewInit {
 
   loadItems() {
     this.isLoading = true;
-    this.tmdbService.discover(this.cat, this.opt).pipe(take(1)).subscribe(data => {
+    this.tmdbService.discover(this.cat, this.opt).pipe(take(1)).subscribe((data: DiscoverResponse) => {
       this.items.push(...data.results);
       this.index = this.opt.page;
       this.totalPages = data.total_pages;
