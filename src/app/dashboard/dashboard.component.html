@@ -1,13 +1,13 @@
 <form class="search" (submit)="search()">
   <img src="assets/images/searchicon.png">
-  <input type="text" [(ngModel)]="searchText" name="searchText" placeholder="Search ..">
+  <input type="text" [(ngModel)]="searchText" name="searchText" placeholder="Enter movie name..">
 </form>
 <div class="filter" *ngIf="searchResults.length > 0">
   <div *ngFor="let search of searchResults; index as i;">
-    <app-scrollview (removeEvent)="removeSearchHandler($event)" [title]="search.title" [items]="search.items"></app-scrollview>
+    <app-scrollview (removeEvent)="removeSearchHandler($event)" [title]="search.title" [items]="search.items" cat="movie"></app-scrollview>
   </div>
 </div>
 <div class="filter" *ngFor="let filter of filters">
   <app-scrollview [title]="filter.title" [opt]="filter.discoverOption" [cat]="filter.category"></app-scrollview>
 </div>
-<div #loadMore><span *ngIf="storage.genres.length > filterStart">loading....</span></div>
+<div #loadMore><span *ngIf="storage.genres.length > filterStart"><img src="/assets/images/loading.gif"></span></div>

@@ -58,7 +58,7 @@ export class MovieInfoComponent implements OnInit {
           d.spoken_languages.forEach(l => _spoken_languages.push(l.name))
           this.spoken_languages = _spoken_languages.join(", ");
           this.firebaseService
-            .search(this.mediaInfo.title)
+            .search(this.mediaInfo.title, 1)
             .pipe(take(1))
             .subscribe(data => this.googleSearchResult = data);
         });

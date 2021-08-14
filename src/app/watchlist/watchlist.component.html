@@ -1,3 +1,3 @@
 <div class="filter" *ngFor="let filter of filters; index as i;">
-  <app-scrollview (removeEvent)="removeCatHandler" [opt]="filter.discoverOption" [title]="filter.title" [cat]="movieCat"></app-scrollview>
+  <app-scrollview (removeEvent)="removeCatHandler" [items]="filter.items" [title]="filter.title" cat="movie"></app-scrollview>
 </div>

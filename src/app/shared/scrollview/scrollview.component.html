@@ -7,11 +7,11 @@
       <div class="info">
         <button *ngIf="cat === 'movie'" (click)="addItemTo(item)">+</button>
         <a routerLink="/{{cat}}/{{item.id}}">
-          <img class="poster" lazySrc="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
+          <img class="poster" src="/assets/images/loading.gif" lazySrc="{{imgBaseUrl}}{{item.poster_path}}" fallback="assets/images/no-image.png" />
         </a>
         <div class="title">{{item.title}} {{item.release_date | date:'LLL yyyy'}}</div>
       </div>
     </div>
   </div>
-  <div #loadMore></div>
+  <div #loadMore><img *ngIf="(isLoading || index <= (totalPages - 1))" src="/assets/images/loading.gif"></div>
 </div>

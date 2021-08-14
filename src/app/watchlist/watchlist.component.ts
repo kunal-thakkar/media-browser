@@ -12,7 +12,6 @@ import { Category, TmdbService } from '../tmdb.service';
 export class WatchlistComponent implements OnInit {
 
   filters: MediaList[];
-  movieCat: Category = Category.Movie;
 
   constructor(private tmdbService: TmdbService, private storage: StorageService,
     private analytics: AngularFireAnalytics) { }

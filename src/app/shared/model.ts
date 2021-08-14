@@ -14,6 +14,69 @@ export interface MediaList {
   isCustom?: boolean;
 }
 
+export interface GoogleSearchResultItem {
+  cacheId: string,//"qxD6WYIKKksJ"
+  displayLink: string,//"www.primevideo.com"
+  formattedUrl: string, //"https://www.primevideo.com/.../The-Nut-Job/ 0JGH6EXV8XTNV6KBTL0UUWV6V7"
+  htmlFormattedUrl: string,//"https://www.primevideo.com/.../<b>The-Nut-Job</b>/ 0JGH6EXV8XTNV6KBTL0UUWV6V7"
+  htmlSnippet: string,//"&quot;<b>The Nut Job</b>&quot; is a comedy that follows Surly (voiced by Will Arnett) a mischievous squirrel who must plan a heist to get into his town&#39;s biggest nut shop in order to&nbsp;..."
+  htmlTitle: string,//"The Nut Job - Prime Video"
+  kind: string,//"customsearch#result"
+  link: string,//"https://www.primevideo.com/detail/The-Nut-Job/0JGH6EXV8XTNV6KBTL0UUWV6V7"
+  pagemap: {
+    cse_thumbnail: [{
+      height: string,//"268"
+      src: string,//"https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTSNoK27V9_YNpLxRTB0AuGu2qkxvnDO5IfNuag0MoQoO0E24tBelhYXa7u"
+      width: string//"188"
+    }],
+    cse_image: [{
+      src: string,// "https://images-na.ssl-images-amazon.com/images/S/pv-target-images/26b26e1aa27047c6a1913789e2e6be7503035679031b6982e7592bded8581204._RI_V_TTW_.jpg"
+    }]
+  },
+  snippet: string,// "\"The Nut Job\" is a comedy that follows Surly (voiced by Will Arnett) a mischievous squirrel who must plan a heist to get into his town's biggest nut shop in order to ..."
+  title: string, //"The Nut Job - Prime Video"
+}
+
+export interface GoogleSearchResult {
+  context: { title: string }
+  items: GoogleSearchResultItem[],
+  kind: string
+  queries: {
+    request: [{
+      count: number,//10
+      cx: string,//"1c071add967e41c16"
+      inputEncoding: string,// "utf8"
+      outputEncoding: string,//"utf8"
+      safe: string,//"off"
+      searchTerms: string,//"\"The Nut Job\""
+      startIndex: number,//1
+      title: string,//"Google Custom Search - \"The Nut Job\""
+      totalResults: string,//"698"
+    }],
+    nextPage: [{
+      count: number,//10
+      cx: string,//"1c071add967e41c16"
+      inputEncoding: string,//"utf8"
+      outputEncoding: string,//"utf8"
+      safe: string,//"off"
+      searchTerms: string,//"\"The Nut Job\""
+      startIndex: number,//11
+      title: string,//"Google Custom Search - \"The Nut Job\""
+      totalResults: string,//"698"
+    }]
+  }
+  searchInformation: {
+    searchTime: number,
+    formattedSearchTime: string,
+    totalResults: string,
+    formattedTotalResults: string
+  }
+  url: {
+    type: string,
+
+  }
+}
+
 export interface StorageData {
   metadata: UploadMetadata,
   data: any
