@@ -14,6 +14,15 @@ export interface MediaList {
   isCustom?: boolean;
 }
 
+export interface TorrentResult {
+  hash_code: string;
+  leechers: number;
+  seeders: number;
+  size: string;
+  source: string;
+  title: string;
+}
+
 export interface GoogleSearchResultItem {
   cacheId: string,//"qxD6WYIKKksJ"
   displayLink: string,//"www.primevideo.com"

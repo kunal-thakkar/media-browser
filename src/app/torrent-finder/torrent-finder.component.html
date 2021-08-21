@@ -1,0 +1,13 @@
+<form class="search" (submit)="search()">
+  <img src="assets/images/searchicon.png">
+  <input type="text" [(ngModel)]="searchText" name="searchText">
+</form>
+<mat-card *ngFor="let result of searchResult | async">
+  <mat-card-header>
+    <mat-card-title>{{result.title}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    Size: {{result.size}} Seeders: {{result.seeders}} Leachers: {{result.leechers}}
+    <mat-icon (click)="copyMagnet(result.title, result.hash_code)"> content_copy </mat-icon>
+  </mat-card-content>
+</mat-card>

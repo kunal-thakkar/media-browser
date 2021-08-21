@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { GoogleSearchResult } from './shared/model';
+import { GoogleSearchResult, TorrentResult } from './shared/model';
 
 @Injectable({
   providedIn: 'root'
@@ -68,5 +68,12 @@ export class FirebaseService {
       ];
       return result;
     }));
+  }
+
+  searchTorrent(q: string): Observable<TorrentResult[]> {
+    return this.http.get<TorrentResult[]>('https://b0xxfgl66m.execute-api.us-east-1.amazonaws.com/torrent/torrent-finder', {
+      params: { q: q },
+      headers: { 'x-api-id': environment.firebase.apiKey }
+    });
   }
 }

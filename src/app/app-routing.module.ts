@@ -9,6 +9,7 @@ import { WatchlistComponent } from './watchlist/watchlist.component';
 import { MediaCollectionComponent } from './media-collection/media-collection.component';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
+import { TorrentFinderComponent } from './torrent-finder/torrent-finder.component';
 
 @Injectable()
 export class AuthGaurdService implements CanActivate {
@@ -22,6 +23,10 @@ export class AuthGaurdService implements CanActivate {
       this.router.navigate(["/"]);
       return false;
     }
+    if (route.url[0].path === 'tf' && !this.storage.user) {
+      this.router.navigate(["/"]);
+      return false;
+    }
     return true;
   }
 
@@ -31,6 +36,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'watchlist', component: WatchlistComponent },
   { path: 'collection', component: MediaCollectionComponent, canActivate: [AuthGaurdService] },
+  { path: 'tf', component: TorrentFinderComponent, canActivate: [AuthGaurdService] },
   { path: 'settings', component: SettingsComponent },
   { path: 'movie/:id', component: MovieInfoComponent },
   { path: 'cast/:id', component: CastInfoComponent },

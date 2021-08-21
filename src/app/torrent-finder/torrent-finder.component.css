@@ -1,0 +1,22 @@
+.mat-card {
+  word-break: break-word;
+}
+
+:host ::ng-deep .mat-card-header-text {
+  margin: unset;
+}
+
+.search input {
+  width: calc(100% - 52px);
+  font-size: 16px;
+  padding: 10px;
+  padding-left: 35px;
+  border: 1px solid #ddd;
+  background-color: white !important;
+}
+
+.search img {
+  margin-left: 10px;
+  padding-top: 10px;
+  position: absolute;
+}
