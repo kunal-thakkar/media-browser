@@ -18,11 +18,12 @@ export interface ScrollItem {
   styleUrls: ['./scrollview.component.css']
 })
 export class ScrollviewComponent implements OnInit, AfterViewInit {
+  @Input() posIndex: number;
   @Input() title: string;
   @Input() opt: DiscoverOption;
   @Input() items: ScrollableItem[] = [];
   @Input() cat: Category;
-  @Output() removeEvent = new EventEmitter<DiscoverOption>();
+  @Output() removeEvent = new EventEmitter<number>();
   @ViewChild('loadMore', { static: false }) loadMore: ElementRef;
 
   isLoading: boolean = false;
@@ -77,6 +78,6 @@ export class ScrollviewComponent implements OnInit, AfterViewInit {
   }
 
   remove() {
-    if (this.removeEvent) this.removeEvent.emit(this.opt);
+    if (this.removeEvent) this.removeEvent.emit(this.posIndex);
   }
 }

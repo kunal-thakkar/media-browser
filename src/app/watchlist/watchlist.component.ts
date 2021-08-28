@@ -25,7 +25,7 @@ export class WatchlistComponent implements OnInit {
 
   removeCat(i: number) {
     this.filters.splice(i, 1);
-    this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.filters);
+    this.storage.updateWatchList(this.filters);
   }
 
   formatDate(d: Date): String {
@@ -33,8 +33,8 @@ export class WatchlistComponent implements OnInit {
     return d.getFullYear() + "-" + format(d.getMonth() + 1) + "-" + format(d.getDate());
   }
 
-  removeCatHandler(filter: MediaList) {
-    this.removeCat(this.filters.indexOf(filter));
+  removeCatHandler(posIndex: number) {
+    this.removeCat(posIndex);
   }
 
 }

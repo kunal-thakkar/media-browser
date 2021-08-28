@@ -50,7 +50,7 @@ export class CastInfoComponent implements OnInit {
           items: [item]
         });
       }
-      this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.storage.movieFilters);
+      this.storage.updateWatchList(this.storage.movieFilters);
     });
   }
 }

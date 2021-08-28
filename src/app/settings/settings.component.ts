@@ -94,7 +94,7 @@ export class SettingsComponent implements OnInit {
   }
 
   saveSettings() {
-    this.storage.writeJson(StorageKeys.DiscoverMovieFilters, this.discoverMovieFilters.filter(e => e != null));
+    this.storage.updateWatchList(this.discoverMovieFilters.filter(e => e != null));
     this.router.navigate(['/dashboard']);
   }
 }

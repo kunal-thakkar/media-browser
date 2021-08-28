@@ -38,7 +38,7 @@ export class CategoryDialogComponent implements OnInit {
 
   private _filter(value): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option ? option.toLowerCase().includes(filterValue) : false);
   }
 
   onNoClick(): void {

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError, forkJoin } from 'rxjs';
+import { Observable, throwError, forkJoin, merge } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DiscoverOption } from './discover.option';
 import { StorageService, StorageKeys } from './storage.service';
-import { DiscoverResponse } from './shared/model';
+import { DiscoverResponse, Language, SelectOption } from './shared/model';
+import { map } from 'rxjs/operators';
 
 export enum Category {
   Movie = "movie", TvShows = "tv"
@@ -17,6 +18,23 @@ export class TmdbService {
   tmdbBaseUrl = "https://api.themoviedb.org/3";
   configuration: any;
   apiKey = "";
+
+  sortOpt: SelectOption[] = [
+    { value: "popularity.asc", text: "Popularity Asc" },
+    { value: "popularity.desc", text: "Popularity Desc" },
+    { value: "release_date.asc", text: "Release Date Asc" },
+    { value: "release_date.desc", text: "Release Date Desc" },
+    { value: "revenue.asc", text: "Revenue Asc" },
+    { value: "revenue.desc", text: "Revenue Desc" },
+    { value: "primary_release_date.asc", text: "Primary Release Date Asc" },
+    { value: "primary_release_date.desc", text: "Primary Release Date Desc" },
+    { value: "original_title.asc", text: "Original Title Asc" },
+    { value: "original_title.desc", text: "Original Title Desc" },
+    { value: "vote_average.asc", text: "Vote Average Asc" },
+    { value: "vote_average.desc", text: "Vote Average Desc" },
+    { value: "vote_count.asc", text: "Vote Count Asc" },
+    { value: "vote_count.desc", text: "Vote Count Desc" }
+  ];
 
   constructor(private http: HttpClient, private storage: StorageService) {
     this.apiKey = storage.getTmdbKey();
@@ -74,7 +92,9 @@ export class TmdbService {
   }
 
   getLanguages(): Observable<any> {
-    return this.http.get(`${this.tmdbBaseUrl}/configuration/languages`, { params: { api_key: this.apiKey } });
+    return this.http
+      .get(`${this.tmdbBaseUrl}/configuration/languages`, { params: { api_key: this.apiKey } })
+      .pipe(map((d: Language[]) => d.sort((a, b) => a.english_name.localeCompare(b.english_name))));
   }
 
   getImgBaseUrl(size: number = 1): string {

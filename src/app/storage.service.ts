@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { FirebaseService } from './firebase.service';
 import { MediaList, Genre, Media, KodiExportMovie, StorageData } from './shared/model';
-import { UploadMetadata } from '@angular/fire/storage/interfaces';
+import { UploadMetadata, UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export enum StorageKeys {
   PreferenceKey = 'preferences',
@@ -17,7 +17,8 @@ export enum StorageKeys {
   Configuration = "configuration",
   SearchHistory = "searchHistory",
   Languages = "languages",
-  MediaCollection = "collection"
+  MediaCollection = "collection",
+  DashboardFilters = "dashboardFilters"
 }
 
 @Injectable({
@@ -86,8 +87,9 @@ export class StorageService {
       if (this.user) {
         var jsonString = JSON.stringify(_val);
         var blob = new Blob([jsonString], { type: "application/json" })
-        this.fireStorage.ref(this.user.email + "/" + key).put(blob);
-        this.write(key, JSON.stringify({ metadata: val.metadata, data: _val }));
+        this.fireStorage.ref(this.user.email + "/" + key).put(blob).then((a: UploadTaskSnapshot) => {
+          this.write(key, JSON.stringify({ metadata: a.metadata, data: _val }));
+        });
       }
       else {
         this.write(key, JSON.stringify({ metadata: { md5Hash: '' }, data: _val }));
@@ -128,7 +130,11 @@ export class StorageService {
         items: [item]
       });
     }
-    this.writeJson(StorageKeys.DiscoverMovieFilters, { metadata: null, data: this.movieFilters });
+    this.updateWatchList(this.movieFilters);
+  }
+
+  updateWatchList(mediaList: MediaList[]) {
+    this.writeJson(StorageKeys.DiscoverMovieFilters, { metadata: null, data: mediaList });
   }
 
   mapKodiExportToMedia = (movie: KodiExportMovie[]) => movie.map((element: KodiExportMovie) => ({

@@ -33,11 +33,7 @@ export class TmdbConfigProvider {
           certifications[k] = certs;
         }
         this.storage.writeJson(StorageKeys.MovieCertificationsKey, certifications);
-        let languages = {};
-        data[3].forEach(e => {
-          languages[e["iso_639_1"]] = e["english_name"];
-        });
-        this.storage.writeJson(StorageKeys.Languages, languages);
+        this.storage.writeJson(StorageKeys.Languages, data[3]);
         resolve(true);
       });
     });

@@ -1,0 +1,31 @@
+<div>
+  <button mat-icon-button (click)="showFilter=!showFilter" fxShow="true" fxHide.gt-xs>
+    <mat-icon>menu</mat-icon>
+  </button>
+</div>
+<form fxShow [fxShow.xs]="showFilter" appearance="legacy" [formGroup]="fg">
+  <div fxLayout="row wrap">
+    <mat-form-field fxFlex fxFlex.lt-sm="100">
+      <mat-label>Language</mat-label>
+      <mat-select formControlName="with_original_language" multiple>
+        <mat-option *ngFor="let opt of langOpt" [value]="opt.value">{{opt.text}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex fxFlex.lt-sm="100">
+      <mat-label>Sort By</mat-label>
+      <mat-select formControlName="sort_by">
+        <mat-option *ngFor="let sort of sortOpt" [value]="sort.value">{{sort.text}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex fxFlex.lt-sm="100">
+      <mat-label>Group By</mat-label>
+      <mat-select formControlName="group_by">
+        <mat-option *ngFor="let group of groupOpt" [value]="group.value">{{group.text}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button fxFlex fxFlex.lt-sm="50" mat-button (click)="applyFilter()">Apply</button>
+      <button fxFlex fxFlex.lt-sm="50" mat-button (click)="resetFilter()">Reset</button>
+    </div>
+  </div>
+</form>
