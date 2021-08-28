@@ -6,6 +6,17 @@ export interface Genre {
   name: string;
 }
 
+export interface Language {
+  english_name: string;
+  iso_639_1: string;
+}
+
+export interface SelectOption {
+  text: string;
+  value: string;
+  selected?: boolean;
+}
+
 export interface MediaList {
   title: string;
   items?: Media[];

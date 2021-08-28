@@ -17,7 +17,8 @@ export enum StorageKeys {
   Configuration = "configuration",
   SearchHistory = "searchHistory",
   Languages = "languages",
-  MediaCollection = "collection"
+  MediaCollection = "collection",
+  DashboardFilters = "dashboardFilters"
 }
 
 @Injectable({

@@ -31,6 +31,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { FirebaseService } from './firebase.service';
 import { ScrollviewComponent } from './shared/scrollview/scrollview.component';
@@ -38,6 +39,7 @@ import { CategoryDialogComponent } from './category-dialog/category-dialog.compo
 import { WatchlistComponent } from './watchlist/watchlist.component';
 import { MediaCollectionComponent } from './media-collection/media-collection.component';
 import { TorrentFinderComponent } from './torrent-finder/torrent-finder.component';
+import { FilterComponent } from './filter/filter.component';
 
 
 export function TmdbConfigProviderFactory(provider: TmdbConfigProvider) {
@@ -60,7 +62,8 @@ export function FirebaseAuthProviderFactory(service: FirebaseService) {
     CategoryDialogComponent,
     WatchlistComponent,
     MediaCollectionComponent,
-    TorrentFinderComponent
+    TorrentFinderComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +85,7 @@ export function FirebaseAuthProviderFactory(service: FirebaseService) {
     MatInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
+    MatSelectModule,
     MatCardModule,
     FlexLayoutModule
   ],
