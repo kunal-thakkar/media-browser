@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase.service';
 import { TorrentResult } from '../shared/model';
 
@@ -13,9 +15,10 @@ export class TorrentFinderComponent implements OnInit {
 
   searchText: string;
   searchResult: Observable<TorrentResult[]>;
+  isLoading: boolean = false;
   private trackers: string = "";
 
-  constructor(private http: HttpClient, private fireservice: FirebaseService) { }
+  constructor(private http: HttpClient, private fireservice: FirebaseService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.http.get('https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt', {
@@ -27,7 +30,12 @@ export class TorrentFinderComponent implements OnInit {
   }
 
   search() {
-    this.searchResult = this.fireservice.searchTorrent(this.searchText);
+    this.isLoading = true;
+    this.searchResult = this.fireservice.searchTorrent(this.searchText).pipe(catchError(err => {
+      this.snackBar.open(`Error: ${err.error.message}`, 'Ok');
+      this.isLoading = false;
+      return [];
+    }));
   }
 
   copyMagnet(title: string, hashCode: string) {
@@ -37,6 +45,7 @@ export class TorrentFinderComponent implements OnInit {
     input.select();
     var result = document.execCommand('copy');
     document.body.removeChild(input);
+    this.snackBar.open(`${title} copied!`, null, { duration: 2000 });
     return result;
   }
 }

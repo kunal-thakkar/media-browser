@@ -2,12 +2,22 @@
   <img src="assets/images/searchicon.png">
   <input type="text" [(ngModel)]="searchText" name="searchText">
 </form>
-<mat-card *ngFor="let result of searchResult | async">
-  <mat-card-header>
-    <mat-card-title>{{result.title}}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    Size: {{result.size}} Seeders: {{result.seeders}} Leachers: {{result.leechers}}
-    <mat-icon (click)="copyMagnet(result.title, result.hash_code)"> content_copy </mat-icon>
-  </mat-card-content>
-</mat-card>
+<ng-container *ngIf="searchResult | async as results; else loading">
+  <ng-container *ngIf="results.length; else noItems">
+    <mat-card *ngFor="let result of results">
+      <mat-card-header>
+        <mat-card-title>{{result.title}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        Size: {{result.size}} Seeders: {{result.seeders}} Leachers: {{result.leechers}}
+        <mat-icon (click)="copyMagnet(result.title, result.hash_code)"> content_copy </mat-icon>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-template #noItems>
+    <div class="noItems">No result found for {{searchText}}!</div>
+  </ng-template>
+</ng-container>
+<ng-template #loading>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+</ng-template>

@@ -33,6 +33,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FirebaseService } from './firebase.service';
 import { ScrollviewComponent } from './shared/scrollview/scrollview.component';
 import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
@@ -87,6 +88,7 @@ export function FirebaseAuthProviderFactory(service: FirebaseService) {
     MatFormFieldModule,
     MatSelectModule,
     MatCardModule,
+    MatSnackBarModule,
     FlexLayoutModule
   ],
   providers: [StorageService, TmdbService, TmdbConfigProvider, FirebaseService, ScreenTrackingService, AuthGaurdService,

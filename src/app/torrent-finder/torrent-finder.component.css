@@ -20,3 +20,14 @@
   padding-top: 10px;
   position: absolute;
 }
+
+.noItems {
+  font-size: medium;
+  color: red;
+  padding: 10px;
+}
+
+.loading {
+  font-size: medium;
+  padding: 10px;
+}
