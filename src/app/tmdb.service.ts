@@ -5,6 +5,7 @@ import { DiscoverOption } from './discover.option';
 import { StorageService, StorageKeys } from './storage.service';
 import { DiscoverResponse, Language, SelectOption } from './shared/model';
 import { map } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
 
 export enum Category {
   Movie = "movie", TvShows = "tv"
@@ -69,6 +70,9 @@ export class TmdbService {
 
   discover(c: Category, o: DiscoverOption): Observable<DiscoverResponse> {
     let query = ["api_key=" + this.apiKey];
+    if (!o.primary_release_date) {
+      o.primary_release_date = "<" + formatDate(new Date(), "yyyy-MM-dd", "en-US");
+    }
     for (let k in o) {
       if (o.hasOwnProperty(k) && o[k]) this.addQueryCriteria(query, k, o[k]);
     }
