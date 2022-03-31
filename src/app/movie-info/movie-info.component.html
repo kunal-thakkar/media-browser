@@ -20,6 +20,9 @@
         <span>Overview:</span>
         <div class="movie-overview">{{mediaInfo.overview}}</div>
       </div>
+      <div class="movie-detail">
+        <span><a href="https://www.imdb.com/title/{{mediaInfo.imdb_id}}/" target="_blank">IMDB Link</a></span>
+      </div>
     </div>
     <app-scrollview cat="cast" [items]="cast" title="Cast"></app-scrollview>
     <app-scrollview cat="cast" [items]="crew" title="Crew"></app-scrollview>
